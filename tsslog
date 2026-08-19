@@ -1,0 +1,70 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginComponent {
+
+  constructor() {}
+
+  /**
+   * Password show / hide
+   */
+  togglePassword(passwordInput: HTMLInputElement): void {
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+    } else {
+      passwordInput.type = 'password';
+    }
+
+  }
+
+
+  /**
+   * Login
+   *
+   * IMPORTANT:
+   * Replace the code inside this method with
+   * your existing authentication/API logic.
+   */
+  login(username: string, password: string): void {
+
+    if (!username || !password) {
+
+      alert('Please enter username and password.');
+
+      return;
+    }
+
+
+    console.log('Username:', username);
+
+    console.log('Password:', password);
+
+
+    /*
+     * Example:
+     *
+     * this.authService.login(username, password)
+     *   .subscribe({
+     *
+     *     next: (response) => {
+     *
+     *       console.log(response);
+     *
+     *     },
+     *
+     *     error: (error) => {
+     *
+     *       console.error(error);
+     *
+     *     }
+     *
+     *   });
+     */
+  }
+
+}
