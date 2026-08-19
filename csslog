@@ -1,0 +1,1584 @@
+/* =========================================================
+   NPI FUTURISTIC LOGIN
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+
+  position: relative;
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-family:
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 15% 40%,
+      rgba(0, 145, 255, 0.20),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 50%,
+      rgba(96, 65, 255, 0.15),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #020817 0%,
+      #03142c 45%,
+      #020713 100%
+    );
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.tech-grid {
+  position: absolute;
+
+  width: 140%;
+  height: 70%;
+
+  left: -20%;
+  bottom: -15%;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 145, 255, 0.12) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 145, 255, 0.12) 1px,
+      transparent 1px
+    );
+
+  background-size: 55px 55px;
+
+  transform:
+    perspective(600px)
+    rotateX(60deg);
+
+  transform-origin: center bottom;
+
+  opacity: 0.5;
+
+  mask-image:
+    linear-gradient(
+      to top,
+      black,
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+
+.background-glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+.glow-1 {
+  width: 300px;
+  height: 300px;
+
+  left: -100px;
+  top: 20%;
+
+  background: rgba(0, 150, 255, 0.20);
+}
+
+.glow-2 {
+  width: 350px;
+  height: 350px;
+
+  right: -100px;
+  bottom: 10%;
+
+  background: rgba(100, 50, 255, 0.15);
+}
+
+
+/* =========================================================
+   PARTICLES
+   ========================================================= */
+
+.particles span {
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: #20baff;
+
+  box-shadow:
+    0 0 8px #20baff,
+    0 0 18px #008cff;
+
+  animation: particleFloat 8s linear infinite;
+
+  opacity: 0;
+}
+
+.particles span:nth-child(1) {
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.particles span:nth-child(2) {
+  left: 15%;
+  animation-delay: 2s;
+}
+
+.particles span:nth-child(3) {
+  left: 25%;
+  animation-delay: 4s;
+}
+
+.particles span:nth-child(4) {
+  left: 35%;
+  animation-delay: 1s;
+}
+
+.particles span:nth-child(5) {
+  left: 45%;
+  animation-delay: 5s;
+}
+
+.particles span:nth-child(6) {
+  left: 55%;
+  animation-delay: 3s;
+}
+
+.particles span:nth-child(7) {
+  left: 65%;
+  animation-delay: 6s;
+}
+
+.particles span:nth-child(8) {
+  left: 75%;
+  animation-delay: 2.5s;
+}
+
+.particles span:nth-child(9) {
+  left: 85%;
+  animation-delay: 4.5s;
+}
+
+.particles span:nth-child(10) {
+  left: 92%;
+  animation-delay: 1.5s;
+}
+
+.particles span:nth-child(11) {
+  left: 30%;
+  animation-delay: 7s;
+}
+
+.particles span:nth-child(12) {
+  left: 70%;
+  animation-delay: 5.5s;
+}
+
+@keyframes particleFloat {
+
+  0% {
+    top: 110%;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  100% {
+    top: -10%;
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.main-container {
+
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+
+  min-height: calc(100vh - 110px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 40px;
+
+  padding: 45px 60px 20px;
+}
+
+
+/* =========================================================
+   LEFT SECTION
+   ========================================================= */
+
+.left-section {
+
+  width: min(820px, 55vw);
+
+  min-height: 650px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* =========================================================
+   FEATURE CARDS
+   ========================================================= */
+
+.feature-card {
+
+  position: absolute;
+
+  width: 190px;
+
+  padding: 18px;
+
+  display: flex;
+
+  gap: 12px;
+
+  border-radius: 15px;
+
+  border: 1px solid rgba(65, 170, 255, 0.25);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(7, 35, 70, 0.85),
+      rgba(3, 17, 40, 0.75)
+    );
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.25);
+
+  transition: 0.3s ease;
+}
+
+.feature-card:hover {
+
+  transform: translateY(-8px);
+
+  border-color: rgba(0, 180, 255, 0.7);
+
+  box-shadow:
+    0 0 25px rgba(0, 150, 255, 0.2);
+}
+
+.track-card {
+  left: 0;
+  top: 100px;
+}
+
+.analytics-card {
+  left: 0;
+  top: 290px;
+}
+
+.secure-card {
+  left: 0;
+  top: 480px;
+}
+
+.feature-icon {
+
+  min-width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  font-size: 21px;
+
+  color: #54c8ff;
+
+  background:
+    rgba(0, 150, 255, 0.10);
+
+  border:
+    1px solid rgba(0, 150, 255, 0.25);
+
+  box-shadow:
+    0 0 15px rgba(0, 150, 255, 0.15);
+}
+
+.feature-card h3 {
+
+  margin: 0 0 6px;
+
+  font-size: 11px;
+
+  letter-spacing: 0.8px;
+
+  color: #47baff;
+}
+
+.feature-card p {
+
+  margin: 0;
+
+  color: rgba(220, 240, 255, 0.6);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   NPI AREA
+   ========================================================= */
+
+.npi-area {
+
+  width: 560px;
+  height: 600px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* =========================================================
+   NETWORK LINES
+   ========================================================= */
+
+.network-lines {
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid rgba(0, 150, 255, 0.12);
+
+  box-shadow:
+    inset 0 0 50px rgba(0, 140, 255, 0.05),
+    0 0 50px rgba(0, 140, 255, 0.05);
+}
+
+.network-lines::before,
+.network-lines::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 70px;
+
+  border:
+    1px dashed rgba(0, 160, 255, 0.14);
+
+  border-radius: 50%;
+}
+
+.network-lines::after {
+
+  inset: 140px;
+
+  border-style: solid;
+
+  animation: rotateNetwork 15s linear infinite;
+}
+
+@keyframes rotateNetwork {
+
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   NPI CORE
+   ========================================================= */
+
+.npi-core {
+
+  width: 180px;
+  height: 180px;
+
+  position: relative;
+
+  transform:
+    perspective(600px)
+    rotateX(4deg)
+    rotateY(-8deg);
+
+  z-index: 4;
+
+  animation: coreFloat 4s ease-in-out infinite;
+}
+
+@keyframes coreFloat {
+
+  0%,
+  100% {
+    transform:
+      perspective(600px)
+      rotateX(4deg)
+      rotateY(-8deg)
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      perspective(600px)
+      rotateX(4deg)
+      rotateY(-8deg)
+      translateY(-12px);
+  }
+}
+
+.core-glow {
+
+  position: absolute;
+
+  inset: -40px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 150, 255, 0.35),
+      transparent 65%
+    );
+
+  filter: blur(20px);
+
+  z-index: -1;
+}
+
+.npi-face {
+
+  width: 150px;
+  height: 150px;
+
+  position: absolute;
+
+  left: 15px;
+  top: 15px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 15px;
+
+  border:
+    2px solid #16aaff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #071e3d,
+      #082a55
+    );
+
+  box-shadow:
+    inset 0 0 30px rgba(0, 150, 255, 0.18),
+    0 0 30px rgba(0, 140, 255, 0.25);
+
+  transform: skewY(-5deg);
+}
+
+.npi-face span {
+
+  font-size: 44px;
+
+  font-weight: 800;
+
+  letter-spacing: 5px;
+
+  color: #38c5ff;
+
+  text-shadow:
+    0 0 15px rgba(0, 180, 255, 0.8);
+}
+
+.npi-face small {
+
+  margin-top: 5px;
+
+  font-size: 11px;
+
+  letter-spacing: 5px;
+
+  color: #a6dfff;
+}
+
+.npi-top {
+
+  position: absolute;
+
+  width: 150px;
+  height: 35px;
+
+  left: 15px;
+  top: -3px;
+
+  border:
+    2px solid #36bcff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0c3965,
+      #106d9e
+    );
+
+  transform:
+    skewX(-40deg)
+    rotateX(55deg);
+
+  transform-origin: bottom;
+}
+
+.npi-side {
+
+  position: absolute;
+
+  width: 38px;
+  height: 150px;
+
+  right: -15px;
+  top: 5px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #06335a,
+      #041d3a
+    );
+
+  border:
+    2px solid #0c8ed2;
+
+  transform:
+    skewY(40deg);
+
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   CLOUD
+   ========================================================= */
+
+.cloud {
+
+  position: absolute;
+
+  top: 30px;
+  right: 55px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  color: #4bcaff;
+
+  animation: cloudFloat 5s ease-in-out infinite;
+}
+
+.cloud-shape {
+
+  font-size: 60px;
+
+  text-shadow:
+    0 0 20px #008cff;
+}
+
+.cloud span {
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+}
+
+@keyframes cloudFloat {
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+
+/* =========================================================
+   DATA PANELS
+   ========================================================= */
+
+.data-panel {
+
+  position: absolute;
+
+  padding: 14px;
+
+  border-radius: 13px;
+
+  border:
+    1px solid rgba(0, 170, 255, 0.35);
+
+  background:
+    rgba(3, 24, 50, 0.8);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 0 25px rgba(0, 120, 255, 0.08);
+}
+
+.analytics-panel {
+
+  top: 120px;
+  right: 20px;
+
+  width: 150px;
+  height: 125px;
+}
+
+.panel-title {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  font-size: 9px;
+
+  color: #65cfff;
+
+  letter-spacing: 1px;
+}
+
+.panel-title b {
+
+  color: #40e99a;
+
+  font-size: 8px;
+}
+
+.chart {
+
+  height: 65px;
+
+  display: flex;
+
+  align-items: end;
+
+  gap: 5px;
+
+  margin-top: 15px;
+}
+
+.chart span {
+
+  width: 14px;
+
+  border-radius: 3px 3px 0 0;
+
+  background:
+    linear-gradient(
+      to top,
+      #0876d1,
+      #42c8ff
+    );
+
+  box-shadow:
+    0 0 8px rgba(0, 170, 255, 0.3);
+}
+
+.chart span:nth-child(1) {
+  height: 25%;
+}
+
+.chart span:nth-child(2) {
+  height: 45%;
+}
+
+.chart span:nth-child(3) {
+  height: 35%;
+}
+
+.chart span:nth-child(4) {
+  height: 65%;
+}
+
+.chart span:nth-child(5) {
+  height: 55%;
+}
+
+.chart span:nth-child(6) {
+  height: 90%;
+}
+
+.server-panel {
+
+  left: 120px;
+  bottom: 190px;
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+
+  width: 170px;
+}
+
+.server-icon {
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  color: #35c4ff;
+
+  background:
+    rgba(0, 150, 255, 0.1);
+}
+
+.server-panel strong {
+
+  display: block;
+
+  font-size: 9px;
+
+  letter-spacing: 1px;
+}
+
+.server-panel small {
+
+  color: #36e899;
+
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   TECHNOLOGY NODES
+   ========================================================= */
+
+.technology-node {
+
+  position: absolute;
+
+  width: 75px;
+  height: 75px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  border-radius: 15px;
+
+  border:
+    1px solid rgba(0, 170, 255, 0.35);
+
+  background:
+    rgba(4, 29, 60, 0.85);
+
+  box-shadow:
+    0 0 25px rgba(0, 130, 255, 0.12);
+
+  color: #52c9ff;
+}
+
+.technology-node div {
+
+  font-size: 25px;
+}
+
+.technology-node span {
+
+  font-size: 7px;
+
+  letter-spacing: 1px;
+
+  color: rgba(220, 240, 255, 0.7);
+}
+
+.node-user {
+
+  left: 115px;
+  top: 220px;
+}
+
+.node-proposal {
+
+  right: 105px;
+  bottom: 230px;
+}
+
+.node-ai {
+
+  left: 230px;
+  bottom: 100px;
+}
+
+
+/* =========================================================
+   ARROWS
+   ========================================================= */
+
+.tech-arrow {
+
+  position: absolute;
+
+  color: #23baff;
+
+  font-size: 30px;
+
+  text-shadow:
+    0 0 10px #009dff;
+
+  animation: arrowPulse 1.5s infinite;
+}
+
+.arrow-one {
+
+  left: 190px;
+  top: 270px;
+
+  transform: rotate(45deg);
+}
+
+.arrow-two {
+
+  right: 175px;
+  bottom: 270px;
+
+  transform: rotate(-45deg);
+}
+
+@keyframes arrowPulse {
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.statistics {
+
+  position: absolute;
+
+  left: 100px;
+  right: 40px;
+  bottom: 5px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 10px;
+}
+
+.stat-card {
+
+  padding: 15px 8px;
+
+  text-align: center;
+
+  border:
+    1px solid rgba(0, 150, 255, 0.22);
+
+  border-radius: 12px;
+
+  background:
+    rgba(4, 28, 57, 0.75);
+
+  backdrop-filter: blur(10px);
+}
+
+.stat-card strong {
+
+  display: block;
+
+  font-size: 18px;
+
+  color: #45c5ff;
+
+  text-shadow:
+    0 0 10px rgba(0, 160, 255, 0.5);
+}
+
+.stat-card span {
+
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 7px;
+
+  color: rgba(220, 240, 255, 0.55);
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   LOGIN SECTION
+   ========================================================= */
+
+.login-section {
+
+  width: 450px;
+
+  flex-shrink: 0;
+}
+
+
+.login-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 34px;
+
+  border-radius: 24px;
+
+  border:
+    1px solid rgba(66, 174, 255, 0.45);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(7, 29, 60, 0.92),
+      rgba(2, 14, 34, 0.88)
+    );
+
+  backdrop-filter: blur(25px);
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.45),
+    inset 0 0 50px rgba(0, 130, 255, 0.035);
+
+  animation: cardAppear 0.8s ease;
+}
+
+@keyframes cardAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Animated card border */
+
+.login-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 10%;
+
+  width: 80%;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #00aaff,
+      #7c4dff,
+      transparent
+    );
+
+  box-shadow:
+    0 0 20px #009dff;
+
+  animation: topLight 3s linear infinite;
+}
+
+@keyframes topLight {
+
+  0% {
+    transform: translateX(-40%);
+  }
+
+  50% {
+    transform: translateX(40%);
+  }
+
+  100% {
+    transform: translateX(-40%);
+  }
+}
+
+
+/* =========================================================
+   SECURITY ICON
+   ========================================================= */
+
+.security-icon {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 14px;
+}
+
+.shield {
+
+  width: 55px;
+  height: 62px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  clip-path:
+    polygon(
+      50% 0%,
+      92% 15%,
+      87% 67%,
+      50% 100%,
+      13% 67%,
+      8% 15%
+    );
+
+  background:
+    linear-gradient(
+      145deg,
+      #087bca,
+      #6e42ff
+    );
+
+  box-shadow:
+    0 0 25px rgba(0, 150, 255, 0.4);
+}
+
+.shield span {
+
+  font-size: 24px;
+
+  font-weight: bold;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.system-title {
+
+  text-align: center;
+
+  margin-bottom: 25px;
+}
+
+.system-title h1 {
+
+  margin: 0;
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.2px;
+}
+
+.system-title p {
+
+  margin: 8px 0 0;
+
+  font-size: 11px;
+
+  color: rgba(210, 235, 255, 0.55);
+
+  letter-spacing: 1px;
+}
+
+.system-title p span {
+
+  color: #32bfff;
+
+  margin: 0 4px;
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.login-tabs {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  padding: 4px;
+
+  margin-bottom: 22px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid rgba(100, 180, 255, 0.1);
+}
+
+.tab {
+
+  height: 38px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: rgba(210, 230, 250, 0.55);
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  transition: 0.3s;
+}
+
+.tab.active {
+
+  color: white;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 130, 255, 0.7),
+      rgba(92, 62, 255, 0.7)
+    );
+
+  box-shadow:
+    0 0 15px rgba(0, 120, 255, 0.18);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-group {
+
+  margin-bottom: 17px;
+}
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  color: rgba(220, 238, 255, 0.75);
+
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+
+  position: relative;
+}
+
+.input-wrapper input,
+.input-wrapper select {
+
+  width: 100%;
+
+  height: 48px;
+
+  padding:
+    0 42px;
+
+  border-radius: 11px;
+
+  border:
+    1px solid rgba(100, 180, 255, 0.18);
+
+  outline: none;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  color: white;
+
+  font-size: 12px;
+
+  transition: 0.3s;
+}
+
+.input-wrapper input::placeholder {
+
+  color:
+    rgba(210, 230, 250, 0.35);
+}
+
+.input-wrapper select {
+
+  appearance: none;
+
+  cursor: pointer;
+}
+
+.input-wrapper select option {
+
+  background: #071b38;
+
+  color: white;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus {
+
+  border-color: #13aaff;
+
+  background:
+    rgba(0, 140, 255, 0.06);
+
+  box-shadow:
+    0 0 18px rgba(0, 150, 255, 0.13);
+}
+
+.input-icon {
+
+  position: absolute;
+
+  left: 15px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #43c5ff;
+
+  font-size: 18px;
+
+  z-index: 2;
+}
+
+.select-arrow {
+
+  position: absolute;
+
+  right: 15px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #65caff;
+
+  pointer-events: none;
+}
+
+.password-toggle {
+
+  position: absolute;
+
+  right: 13px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: none;
+
+  background: transparent;
+
+  color: rgba(180, 220, 255, 0.55);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   LOGIN OPTIONS
+   ========================================================= */
+
+.login-options {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin: 2px 0 20px;
+
+  font-size: 10px;
+}
+
+.remember {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color:
+    rgba(210, 230, 250, 0.6);
+
+  cursor: pointer;
+}
+
+.remember input {
+
+  display: none;
+}
+
+.custom-checkbox {
+
+  width: 15px;
+  height: 15px;
+
+  border:
+    1px solid rgba(100, 180, 255, 0.35);
+
+  border-radius: 4px;
+
+  background:
+    rgba(255, 255, 255, 0.03);
+}
+
+.remember input:checked + .custom-checkbox {
+
+  background:
+    linear-gradient(
+      135deg,
+      #009dff,
+      #6946ff
+    );
+
+  box-shadow:
+    0 0 10px rgba(0, 150, 255, 0.4);
+}
+
+.login-options a {
+
+  color: #2fbaff;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.login-options a:hover {
+
+  color: #7bd8ff;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+
+  width: 100%;
+
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 20px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #008fe9,
+      #6350f6
+    );
+
+  box-shadow:
+    0 10px 30px rgba(0, 120, 255, 0.25);
+
+  transition: 0.3s;
+}
+
+.login-button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 35px rgba(0, 140, 255, 0.4);
+}
+
+.login-button:active {
+
+  transform: translateY(0);
+}
+
+.login-arrow {
+
+  font-size: 20px;
+
+  transition: 0.3s;
+}
+
+.login-button:hover .login-arrow {
+
+  transform: translateX(5px);
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.divider {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 23px 0 17px;
+}
+
+.divider span {
+
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    rgba(150, 200, 255, 0.12);
+}
+
+.divider p {
+
+  margin: 0;
+
+  white-space: nowrap;
+
+  font-size: 9px;
+
+  color:
+    rgba(210, 230, 250, 0.4);
+}
+
+
+/* =========================================================
+   SSO
+   ==================================
