@@ -1,1 +1,460 @@
-demo
+<div class="login-page">
+
+  <!-- Animated background -->
+  <div class="background-glow glow-1"></div>
+  <div class="background-glow glow-2"></div>
+
+  <div class="tech-grid"></div>
+
+  <!-- Floating particles -->
+  <div class="particles">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Main content -->
+  <main class="main-container">
+
+    <!-- ================= LEFT SIDE ================= -->
+    <section class="left-section">
+
+      <!-- Feature cards -->
+      <div class="feature-card track-card">
+        <div class="feature-icon">⚡</div>
+
+        <div>
+          <h3>REAL-TIME TRACKING</h3>
+          <p>Monitor proposal status in real time.</p>
+        </div>
+      </div>
+
+      <div class="feature-card analytics-card">
+        <div class="feature-icon">◈</div>
+
+        <div>
+          <h3>SMART ANALYTICS</h3>
+          <p>Data-driven proposal insights.</p>
+        </div>
+      </div>
+
+      <div class="feature-card secure-card">
+        <div class="feature-icon">♢</div>
+
+        <div>
+          <h3>SECURE PLATFORM</h3>
+          <p>Enterprise-grade security.</p>
+        </div>
+      </div>
+
+
+      <!-- NPI technology illustration -->
+      <div class="npi-area">
+
+        <div class="network-lines"></div>
+
+        <!-- Cloud -->
+        <div class="cloud">
+          <div class="cloud-shape">☁</div>
+          <span>CLOUD</span>
+        </div>
+
+        <!-- Main NPI cube -->
+        <div class="npi-core">
+
+          <div class="core-glow"></div>
+
+          <div class="npi-top"></div>
+
+          <div class="npi-face">
+            <span>NPI</span>
+            <small>SYSTEM</small>
+          </div>
+
+          <div class="npi-side"></div>
+
+        </div>
+
+
+        <!-- Analytics panel -->
+        <div class="data-panel analytics-panel">
+
+          <div class="panel-title">
+            <span>ANALYTICS</span>
+            <b>LIVE</b>
+          </div>
+
+          <div class="chart">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="chart-line"></div>
+
+        </div>
+
+
+        <!-- Server -->
+        <div class="data-panel server-panel">
+
+          <div class="server-icon">▣</div>
+
+          <div>
+            <strong>DATA SERVER</strong>
+            <small>CONNECTED</small>
+          </div>
+
+        </div>
+
+
+        <!-- User node -->
+        <div class="technology-node node-user">
+          <div>♙</div>
+          <span>USER</span>
+        </div>
+
+        <!-- Proposal node -->
+        <div class="technology-node node-proposal">
+          <div>▤</div>
+          <span>PROPOSAL</span>
+        </div>
+
+        <!-- Automation node -->
+        <div class="technology-node node-ai">
+          <div>✦</div>
+          <span>AUTOMATION</span>
+        </div>
+
+
+        <!-- Arrows -->
+        <div class="tech-arrow arrow-one">↑</div>
+        <div class="tech-arrow arrow-two">↑</div>
+
+
+        <!-- Bottom statistics -->
+        <div class="statistics">
+
+          <div class="stat-card">
+            <strong>1250+</strong>
+            <span>PROPOSALS</span>
+          </div>
+
+          <div class="stat-card">
+            <strong>98.6%</strong>
+            <span>SUCCESS RATE</span>
+          </div>
+
+          <div class="stat-card">
+            <strong>24/7</strong>
+            <span>SYSTEM UPTIME</span>
+          </div>
+
+          <div class="stat-card">
+            <strong>50+</strong>
+            <span>ACTIVE USERS</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= RIGHT LOGIN ================= -->
+    <section class="login-section">
+
+      <div class="login-card">
+
+        <!-- Top glow -->
+        <div class="card-top-glow"></div>
+
+        <!-- Security icon -->
+        <div class="security-icon">
+          <div class="shield">
+            <span>✓</span>
+          </div>
+        </div>
+
+
+        <div class="system-title">
+          <h1>NPI Proposal Tracking System</h1>
+
+          <p>
+            Secure <span>•</span>
+            Intelligent <span>•</span>
+            Connected
+          </p>
+        </div>
+
+
+        <!-- Login tabs -->
+        <div class="login-tabs">
+
+          <button
+            type="button"
+            class="tab active">
+            i-Pocket
+          </button>
+
+          <button
+            type="button"
+            class="tab">
+            i-Pocket Account
+          </button>
+
+        </div>
+
+
+        <!-- Domain -->
+        <div class="form-group">
+
+          <label>Domain</label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">◎</span>
+
+            <select>
+              <option>India</option>
+              <option>China</option>
+              <option>Japan</option>
+              <option>USA</option>
+            </select>
+
+            <span class="select-arrow">⌄</span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Username -->
+        <div class="form-group">
+
+          <label>Username</label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">♙</span>
+
+            <input
+              #username
+              type="text"
+              placeholder="Enter your username"
+              autocomplete="username"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- Password -->
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">◇</span>
+
+            <input
+              #password
+              type="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword(password)">
+              ◉
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- Remember / Forgot -->
+        <div class="login-options">
+
+          <label class="remember">
+
+            <input type="checkbox">
+
+            <span class="custom-checkbox"></span>
+
+            <span>Remember Me</span>
+
+          </label>
+
+          <a href="javascript:void(0)">
+            Forgot Password?
+          </a>
+
+        </div>
+
+
+        <!-- Login button -->
+        <button
+          type="button"
+          class="login-button"
+          (click)="login(username.value, password.value)">
+
+          <span>LOGIN</span>
+
+          <span class="login-arrow">→</span>
+
+        </button>
+
+
+        <!-- Divider -->
+        <div class="divider">
+
+          <span></span>
+
+          <p>or continue with</p>
+
+          <span></span>
+
+        </div>
+
+
+        <!-- SSO buttons -->
+        <div class="sso-buttons">
+
+          <button type="button" title="Microsoft">
+            <span class="microsoft-icon">
+              ▦
+            </span>
+          </button>
+
+          <button type="button" title="Office">
+            <span class="office-icon">
+              ◫
+            </span>
+          </button>
+
+          <button type="button" title="Google">
+            <span class="google-icon">
+              G
+            </span>
+          </button>
+
+          <button type="button" title="SSO">
+            <span class="sso-icon">
+              ♢
+            </span>
+          </button>
+
+        </div>
+
+
+        <!-- Security status -->
+        <div class="security-status">
+
+          <span class="status-dot"></span>
+
+          <span>Secure connection established</span>
+
+          <span class="lock-text">256-BIT</span>
+
+        </div>
+
+
+        <!-- Copyright -->
+        <div class="copyright">
+
+          © 2026–2027 Foxconn &amp; Business Group IT.
+          All Rights Reserved.
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Bottom technology bar -->
+  <footer class="technology-bar">
+
+    <div class="technology-item">
+
+      <div class="bottom-icon">◉</div>
+
+      <div>
+        <strong>REAL-TIME TRACKING</strong>
+        <small>Monitor proposals</small>
+      </div>
+
+    </div>
+
+
+    <div class="technology-item">
+
+      <div class="bottom-icon">◈</div>
+
+      <div>
+        <strong>SMART ANALYTICS</strong>
+        <small>Data-driven insights</small>
+      </div>
+
+    </div>
+
+
+    <div class="technology-item">
+
+      <div class="bottom-icon">⚙</div>
+
+      <div>
+        <strong>WORKFLOW AUTOMATION</strong>
+        <small>Streamlined processes</small>
+      </div>
+
+    </div>
+
+
+    <div class="technology-item">
+
+      <div class="bottom-icon">☁</div>
+
+      <div>
+        <strong>CLOUD POWERED</strong>
+        <small>Scalable &amp; reliable</small>
+      </div>
+
+    </div>
+
+
+    <div class="technology-item">
+
+      <div class="bottom-icon">◇</div>
+
+      <div>
+        <strong>DATA SECURITY</strong>
+        <small>End-to-end encryption</small>
+      </div>
+
+    </div>
+
+  </footer>
+
+</div>
