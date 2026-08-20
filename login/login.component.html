@@ -1,0 +1,86 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+
+    <div class="npi-section">
+      <img src="./assets/center-login.png" alt="NPI Proposal" class="npi-image" />
+    </div>
+
+    <div class="login-section">
+
+      <div class="form-content">
+
+        <div class="my-logo">
+          <img  src="../login/assets/NPI-LOGO.ico"/>
+
+          <div class="dec"  style="bottom: 100px;">
+            NPI Proposal Tracking System
+          </div>
+        </div>
+        <div class="NPI-ifrm">
+
+          <iframe *ngIf="iframeSafeSrc" #loginIframe class="login-iframe" [src]="iframeSafeSrc" frameborder="0"
+            style="width: 380px; height: 400px; transform: translateY(90px);"></iframe>
+
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<nz-modal [(nzVisible)]="isForgetPassword" nzTitle="" [nzClosable]="false" [nzCancelText]="null"
+  (nzOnCancel)="closeForgetPasswordModal()" [nzFooter]="modalFooter">
+  <h2 style="text-align:center">{{'table.content.change-password' | translate}}</h2>
+  <form method="post" nz-form #forgetPassword="ngForm">
+    <div nz-row style="margin:20px 0">
+      <input nz-input type="account" [(ngModel)]="resetInfo.account" name="account" style="width:100%;"
+        placeholder="Please enter your account" required autocomplete="off" />
+    </div>
+    <div nz-row style="margin:20px 0">
+      <input nz-input type="text" [(ngModel)]="resetInfo.code" name="code" style="width:50%;"
+        placeholder="Enter Verification Code" required autocomplete="off" />
+      <!-- [disabled]="!resetInfo.account" -->
+      <button nzType="primary" nz-button style="width: 43%;margin-left: 30px;" (click)="sendVerifivationCode()">Send
+        Email
+        Verification Code</button>
+    </div>
+    <P>{{resetInfo.email}}</P>
+    <div *ngIf="isCode">
+      <div nz-row style="margin:20px 0">
+        <input nz-input type="password" [(ngModel)]="resetInfo.newPassword" name="newPassword" style="width:100%;"
+          placeholder="New Password" required autocomplete="off" (blur)="passwordChange('newPassword')" />
+      </div>
+      <div nz-row style="margin:20px 0">
+        <input nz-input type="password" [(ngModel)]="resetInfo.confirmPassword" name="confirmPassword"
+          style="width:100%;" placeholder="Confirm Password" autocomplete="off"
+          (blur)="passwordChange('confirmPassword')" required />
+      </div>
+    </div>
+
+  </form>
+
+             <ng-template #modalFooter>
+             <!-- [disabled]="!forgetPassword.valid" -->
+             <div>
+      <button nz-button nzType="primary" style="display: block;margin: 30px auto;" (click)="resetPassword()"
+        *ngIf="isCode">{{'table.content.password-confirm'|translate}}</button>
+      <button nz-button nzType="primary" style="display: block;margin: 30px auto;" (click)="nextOption()"
+        *ngIf="!isCode">{{'table.content.next'|translate}}</button>
+    </div>
+
+  </ng-template>
+</nz-modal>
+
+<!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="Kind tips:" [nzCancelText]="null" [nzOkText]="null"  (nzOnCancel)="handleCancel()" nzMaskClosable="false" nzWrapClassName="vertical-center-modal">
+  <div>
+    <p class="content-style">We would like to bring to your attention there have been updates to our system architecture,As a result, the SYSTEM URL has been revised. We Kindly request users to use the New URL for accessing the systems.</p>
+    <p class="content-style2">Click here to enter new system:
+      <a href="https://fms.idpbgind.efoxconn.com//#/passport/login" >https://fms.idpbgind.efoxconn.com//#/passport/login</a>
+    </p>
+    <p class="content-style note-style">Note: Please Note the old system URL will be deactivated from 13/06/2024.</p>
+  </div>
+</nz-modal> -->
