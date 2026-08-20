@@ -1,0 +1,1352 @@
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(0, 105, 255, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(0, 162, 255, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #020b1d 0%,
+      #04152e 45%,
+      #031027 100%
+    );
+
+  color: white;
+}
+
+
+/* Tech background effect */
+
+.login-page::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 130, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 130, 255, 0.05) 1px,
+      transparent 1px
+    );
+
+  background-size: 70px 70px;
+
+  opacity: 0.35;
+}
+
+
+/* Background glow */
+
+.background-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 25% 45%,
+      rgba(0, 110, 255, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 50%,
+      rgba(0, 120, 255, 0.12),
+      transparent 30%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.login-container {
+  position: relative;
+
+  z-index: 2;
+
+  width: 92%;
+  max-width: 1450px;
+
+  min-height: calc(100vh - 100px);
+
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 60px;
+}
+
+
+/* =========================
+   LEFT SECTION
+========================= */
+
+.left-section {
+  position: relative;
+
+  width: 55%;
+  min-height: 760px;
+
+  padding-top: 55px;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  position: relative;
+
+  width: 43px;
+  height: 43px;
+
+  transform: rotate(30deg);
+}
+
+.cube-top {
+  position: absolute;
+
+  width: 27px;
+  height: 27px;
+
+  left: 8px;
+  top: 0;
+
+  background: #e7f3ff;
+
+  border: 2px solid #238cff;
+}
+
+.cube-left {
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  left: 0;
+  top: 15px;
+
+  background: #1265c9;
+
+  border: 2px solid #238cff;
+}
+
+.cube-right {
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  right: 0;
+  top: 15px;
+
+  background: #0755b5;
+
+  border: 2px solid #238cff;
+}
+
+
+.logo-text {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.logo-text .npi {
+  color: #1687ff;
+
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.logo-text .systems {
+  color: #b8c2d4;
+
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+
+/* =========================
+   HERO TEXT
+========================= */
+
+.hero-content {
+  margin-top: 70px;
+}
+
+.hero-content h1 {
+  margin: 0;
+
+  font-size: clamp(42px, 4vw, 58px);
+
+  line-height: 1.12;
+
+  font-weight: 700;
+
+  letter-spacing: -1px;
+}
+
+.hero-content h1 span {
+  display: block;
+
+  color: #087cff;
+
+  margin-top: 4px;
+}
+
+.hero-content p {
+  margin-top: 20px;
+
+  color: #c0cad9;
+
+  font-size: 18px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================
+   STATUS CARD
+========================= */
+
+.status-card {
+  position: absolute;
+
+  top: 75px;
+  right: 70px;
+
+  width: 185px;
+
+  padding: 17px;
+
+  border: 1px solid rgba(72, 157, 255, 0.28);
+
+  border-radius: 10px;
+
+  background: rgba(8, 39, 79, 0.55);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 25px rgba(0, 130, 255, 0.05);
+}
+
+.small-title {
+  font-size: 9px;
+
+  color: #9caec8;
+
+  letter-spacing: 1px;
+}
+
+.status-content {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-top: 10px;
+}
+
+.status-main {
+  font-size: 13px;
+}
+
+.status-active {
+  color: #11d6b2;
+
+  font-size: 12px;
+
+  margin-top: 3px;
+}
+
+.shield {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #00d7ba;
+
+  color: #00e5c2;
+
+  font-size: 20px;
+
+  box-shadow:
+    0 0 15px rgba(0, 230, 190, 0.35);
+}
+
+
+/* =========================
+   FLOATING CARDS
+========================= */
+
+.floating-card {
+  position: absolute;
+
+  border: 1px solid rgba(77, 153, 255, 0.22);
+
+  background: rgba(7, 30, 65, 0.62);
+
+  backdrop-filter: blur(12px);
+
+  border-radius: 9px;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.28);
+}
+
+.floating-card > span {
+  display: block;
+
+  color: #9daec7;
+
+  font-size: 9px;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* Proposal */
+
+.proposal-card {
+  left: 0;
+
+  top: 360px;
+
+  width: 135px;
+
+  padding: 14px;
+}
+
+.proposal-card strong {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 16px;
+}
+
+.growth {
+  margin-top: 8px;
+
+  color: #00d6a8;
+
+  font-size: 10px;
+}
+
+.graph {
+  color: #188cff;
+
+  margin-left: 5px;
+
+  font-size: 18px;
+}
+
+
+/* =========================
+   ILLUSTRATION
+========================= */
+
+.illustration {
+  position: absolute;
+
+  width: 520px;
+  height: 350px;
+
+  left: 120px;
+  top: 370px;
+
+  transform: perspective(600px) rotateX(5deg);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15, 110, 255, 0.12),
+      rgba(0, 90, 180, 0.02)
+    );
+
+  border-radius: 35%;
+
+  box-shadow:
+    0 0 70px rgba(0, 110, 255, 0.08);
+}
+
+
+/* Platform */
+
+.illustration::before {
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+  height: 90px;
+
+  bottom: 40px;
+  left: 35px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #103f85,
+      #0a68c9
+    );
+
+  transform: skewX(-25deg);
+
+  border: 1px solid #368eff;
+
+  box-shadow:
+    0 20px 45px rgba(0, 90, 255, 0.35);
+}
+
+
+/* Buildings */
+
+.building {
+  position: absolute;
+
+  z-index: 3;
+
+  background:
+    linear-gradient(
+      145deg,
+      #d9eaff,
+      #6daeff
+    );
+
+  border: 1px solid #8cc4ff;
+
+  box-shadow:
+    0 10px 25px rgba(0, 80, 200, 0.3);
+}
+
+.building-1 {
+  width: 105px;
+  height: 170px;
+
+  left: 190px;
+  bottom: 100px;
+
+  transform: skewY(-10deg);
+}
+
+.building-2 {
+  width: 90px;
+  height: 115px;
+
+  left: 75px;
+  bottom: 90px;
+
+  transform: skewY(-10deg);
+}
+
+.building-3 {
+  width: 100px;
+  height: 130px;
+
+  right: 55px;
+  bottom: 85px;
+
+  transform: skewY(-10deg);
+}
+
+
+/* NPI building */
+
+.building-top {
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #0068d8;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  background: #f1f7ff;
+}
+
+
+/* Building bars */
+
+.building .bar {
+  width: 10px;
+  height: 45px;
+
+  display: inline-block;
+
+  margin: 38px 7px 0;
+
+  background: #167fff;
+
+  border-radius: 2px;
+}
+
+
+/* Database */
+
+.database {
+  position: absolute;
+
+  z-index: 4;
+
+  left: 35px;
+  bottom: 100px;
+
+  width: 65px;
+  height: 70px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 8px;
+
+  background: #0b66c7;
+
+  border: 2px solid #65b6ff;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 0 25px rgba(0, 110, 255, 0.45);
+}
+
+.database div {
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #a9ddff;
+}
+
+
+/* Cloud */
+
+.cloud {
+  position: absolute;
+
+  z-index: 5;
+
+  right: 105px;
+  top: 30px;
+
+  color: #39b6ff;
+
+  font-size: 60px;
+
+  text-shadow:
+    0 0 25px #008cff;
+}
+
+
+/* Arrow */
+
+.arrow-up {
+  position: absolute;
+
+  z-index: 5;
+
+  right: 65px;
+  top: 55px;
+
+  color: #10a6ff;
+
+  font-size: 70px;
+
+  text-shadow:
+    0 0 25px #008cff;
+}
+
+
+/* Chart */
+
+.chart-circle {
+  position: absolute;
+
+  z-index: 6;
+
+  right: 15px;
+  bottom: 125px;
+
+  width: 60px;
+  height: 60px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #0b7dff;
+
+  font-size: 45px;
+
+  background: #d8edff;
+
+  box-shadow:
+    0 0 20px rgba(0, 130, 255, 0.35);
+}
+
+
+/* =========================
+   ON TRACK CARD
+========================= */
+
+.track-card {
+  left: 0;
+
+  bottom: 80px;
+
+  width: 135px;
+
+  padding: 14px;
+}
+
+.track-card strong {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 16px;
+}
+
+.circle-progress {
+  position: absolute;
+
+  width: 38px;
+  height: 38px;
+
+  right: 10px;
+  top: 20px;
+
+  border-radius: 50%;
+
+  border: 5px solid rgba(0, 220, 190, 0.2);
+
+  border-top-color: #00d6ba;
+  border-right-color: #00d6ba;
+}
+
+
+/* =========================
+   TEAM CARD
+========================= */
+
+.team-card {
+  right: 40px;
+
+  bottom: 35px;
+
+  width: 165px;
+
+  padding: 14px;
+}
+
+.team-card strong {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 17px;
+}
+
+.team-card small {
+  color: #9baec7;
+
+  font-size: 9px;
+}
+
+.users-icon {
+  position: absolute;
+
+  right: 12px;
+  bottom: 15px;
+
+  color: #1687ff;
+
+  font-size: 20px;
+
+  letter-spacing: -8px;
+}
+
+
+/* =========================
+   RIGHT SECTION
+========================= */
+
+.right-section {
+  width: 42%;
+
+  display: flex;
+
+  justify-content: center;
+}
+
+
+/* =========================
+   LOGIN CARD
+========================= */
+
+.login-card {
+  width: 490px;
+
+  padding: 42px 48px 38px;
+
+  border-radius: 24px;
+
+  border: 1px solid rgba(135, 194, 255, 0.42);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(44, 86, 132, 0.42),
+      rgba(10, 37, 70, 0.66)
+    );
+
+  backdrop-filter: blur(22px);
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.4),
+    inset 0 0 30px rgba(100, 180, 255, 0.05),
+    0 0 20px rgba(0, 130, 255, 0.08);
+}
+
+
+/* =========================
+   LOGIN SHIELD
+========================= */
+
+.login-shield {
+  width: 100px;
+  height: 100px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #eaf5ff,
+      #b6d9ff
+    );
+
+  box-shadow:
+    0 0 30px rgba(0, 130, 255, 0.35);
+}
+
+.shield-icon {
+  width: 58px;
+  height: 65px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  font-size: 30px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #3196ff,
+      #0766d7
+    );
+
+  clip-path: polygon(
+    50% 0,
+    95% 18%,
+    88% 65%,
+    50% 100%,
+    12% 65%,
+    5% 18%
+  );
+
+  box-shadow:
+    0 0 25px rgba(0, 125, 255, 0.5);
+}
+
+
+/* =========================
+   LOGIN TITLE
+========================= */
+
+.login-card h2 {
+  margin: 0;
+
+  text-align: center;
+
+  font-size: 27px;
+}
+
+.login-subtitle {
+  margin: 10px 0 28px;
+
+  text-align: center;
+
+  color: #d0d9e7;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   DOMAIN TABS
+========================= */
+
+.domain-tabs {
+  display: flex;
+
+  height: 44px;
+
+  margin-bottom: 14px;
+
+  border: 1px solid rgba(122, 169, 219, 0.35);
+
+  border-radius: 8px;
+
+  overflow: hidden;
+}
+
+.domain-tab {
+  flex: 1;
+
+  border: 0;
+
+  color: #c8d1df;
+
+  background: transparent;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.domain-tab.active {
+  color: white;
+
+  background:
+    linear-gradient(
+      90deg,
+      #087de7,
+      #0870d7
+    );
+
+  box-shadow:
+    inset 0 0 20px rgba(0, 170, 255, 0.25);
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.input-box {
+  position: relative;
+
+  width: 100%;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  margin-bottom: 14px;
+
+  padding: 0 14px;
+
+  border: 1px solid rgba(126, 166, 210, 0.4);
+
+  border-radius: 9px;
+
+  background: rgba(8, 31, 60, 0.35);
+
+  transition: 0.2s;
+}
+
+.input-box:focus-within {
+  border-color: #158cff;
+
+  box-shadow:
+    0 0 12px rgba(0, 125, 255, 0.2);
+}
+
+.input-icon {
+  width: 30px;
+
+  color: #c5d0df;
+
+  font-size: 16px;
+}
+
+.input-box input {
+  flex: 1;
+
+  height: 100%;
+
+  border: 0;
+
+  outline: 0;
+
+  color: white;
+
+  background: transparent;
+
+  font-size: 13px;
+}
+
+.input-box input::placeholder {
+  color: #a8b5c8;
+}
+
+
+/* =========================
+   DOMAIN SELECT
+========================= */
+
+.select-box {
+  cursor: pointer;
+}
+
+.select-content {
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.selected-domain {
+  color: #d9e1ec;
+
+  font-size: 13px;
+}
+
+.input-label {
+  color: #adb9cb;
+
+  font-size: 12px;
+}
+
+.dropdown-arrow {
+  color: #b8c7d9;
+
+  font-size: 18px;
+}
+
+
+/* =========================
+   PASSWORD EYE
+========================= */
+
+.password-eye {
+  color: #b6c4d5;
+
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+.login-options {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin: 8px 0 24px;
+
+  font-size: 12px;
+}
+
+.remember {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #e0e7f0;
+
+  cursor: pointer;
+}
+
+.remember input {
+  display: none;
+}
+
+.custom-checkbox {
+  width: 17px;
+  height: 17px;
+
+  display: block;
+
+  border: 1px solid #a8bfd9;
+
+  border-radius: 4px;
+}
+
+.remember input:checked + .custom-checkbox {
+  background: #087eff;
+
+  border-color: #087eff;
+}
+
+.forgot-password {
+  color: #43a3ff;
+
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================
+   LOGIN BUTTON
+========================= */
+
+.login-button {
+  width: 100%;
+
+  height: 50px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  background:
+    linear-gradient(
+      90deg,
+      #087cf0,
+      #0786ed
+    );
+
+  box-shadow:
+    0 8px 25px rgba(0, 110, 255, 0.3);
+
+  transition: 0.25s;
+}
+
+.login-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 30px rgba(0, 125, 255, 0.5);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+  width: 100%;
+
+  height: 1px;
+
+  margin: 23px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(150, 180, 220, 0.35),
+      transparent
+    );
+}
+
+
+/* =========================
+   HELP
+========================= */
+
+.help-text {
+  text-align: center;
+
+  color: #aebbd0;
+
+  font-size: 12px;
+}
+
+.help-text a {
+  color: #36a0ff;
+
+  text-decoration: none;
+
+  margin-left: 4px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  position: absolute;
+
+  z-index: 5;
+
+  left: 0;
+  right: 0;
+
+  bottom: 25px;
+
+  text-align: center;
+
+  color: #aab7ca;
+
+  font-size: 11px;
+
+  line-height: 1.7;
+}
+
+.footer p {
+  margin: 2px 0;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+  .login-container {
+    width: 94%;
+    gap: 30px;
+  }
+
+  .left-section {
+    width: 50%;
+  }
+
+  .right-section {
+    width: 50%;
+  }
+
+  .status-card {
+    right: 10px;
+  }
+
+  .illustration {
+    left: 0;
+
+    transform: scale(0.85);
+    transform-origin: left top;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .login-container {
+    min-height: auto;
+
+    padding: 40px 0 100px;
+
+    flex-direction: column;
+
+    justify-content: flex-start;
+  }
+
+  .left-section {
+    width: 100%;
+
+    min-height: 430px;
+  }
+
+  .right-section {
+    width: 100%;
+  }
+
+  .hero-content {
+    margin-top: 45px;
+  }
+
+  .status-card {
+    display: none;
+  }
+
+  .illustration {
+    transform: scale(0.65);
+
+    left: 50%;
+
+    transform-origin: top center;
+
+    margin-left: -260px;
+  }
+
+  .proposal-card {
+    display: none;
+  }
+
+  .track-card {
+    display: none;
+  }
+
+  .team-card {
+    display: none;
+  }
+
+  .login-card {
+    max-width: 490px;
+
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .login-container {
+    width: 90%;
+  }
+
+  .left-section {
+    min-height: 360px;
+  }
+
+  .logo-text .npi {
+    font-size: 23px;
+  }
+
+  .hero-content h1 {
+    font-size: 36px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+  }
+
+  .illustration {
+    top: 280px;
+
+    transform: scale(0.48);
+
+    margin-left: -250px;
+  }
+
+  .login-card {
+    padding: 32px 22px;
+  }
+
+  .login-shield {
+    width: 80px;
+    height: 80px;
+  }
+
+  .footer {
+    position: relative;
+
+    padding: 20px;
+
+    bottom: auto;
+  }
+}
