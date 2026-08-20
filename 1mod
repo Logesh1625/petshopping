@@ -1,0 +1,284 @@
+<div class="login-page">
+
+  <!-- Background -->
+  <div class="background-overlay"></div>
+
+  <!-- Main Container -->
+  <div class="login-container">
+
+    <!-- ================= LEFT SECTION ================= -->
+    <div class="left-section">
+
+      <!-- Logo -->
+      <div class="logo">
+        <div class="logo-icon">
+          <div class="cube-top"></div>
+          <div class="cube-left"></div>
+          <div class="cube-right"></div>
+        </div>
+
+        <div class="logo-text">
+          <span class="npi">NPI</span>
+          <span class="systems">SYSTEMS</span>
+        </div>
+      </div>
+
+      <!-- Heading -->
+      <div class="hero-content">
+        <h1>
+          NPI Proposal
+          <span>Tracking System</span>
+        </h1>
+
+        <p>
+          Track. Manage. Deliver.<br>
+          Smarter Proposals, Better Results.
+        </p>
+      </div>
+
+      <!-- System Status -->
+      <div class="status-card">
+        <span class="small-title">SYSTEM STATUS</span>
+
+        <div class="status-content">
+          <div>
+            <div class="status-main">All Systems</div>
+            <div class="status-active">Operational</div>
+          </div>
+
+          <div class="shield">
+            ✓
+          </div>
+        </div>
+      </div>
+
+      <!-- Proposal Stats -->
+      <div class="proposal-card floating-card">
+        <span>PROPOSALS</span>
+
+        <strong>1,248</strong>
+
+        <div class="growth">
+          +12.5%
+          <span class="graph">⌁⌁⌁</span>
+        </div>
+      </div>
+
+      <!-- Main Illustration -->
+      <div class="illustration">
+
+        <div class="building building-1">
+          <div class="building-top">NPI</div>
+          <div class="building-lines"></div>
+        </div>
+
+        <div class="building building-2">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+
+        <div class="building building-3">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+
+        <div class="database">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+        <div class="cloud">
+          ☁
+        </div>
+
+        <div class="arrow-up">
+          ↑
+        </div>
+
+        <div class="chart-circle">
+          ◔
+        </div>
+
+      </div>
+
+      <!-- On Track -->
+      <div class="track-card floating-card">
+        <span>ON TRACK</span>
+
+        <strong>89%</strong>
+
+        <div class="circle-progress"></div>
+      </div>
+
+      <!-- Team Activity -->
+      <div class="team-card floating-card">
+        <span>TEAM ACTIVITY</span>
+
+        <strong>24</strong>
+
+        <small>Active Users</small>
+
+        <div class="users-icon">
+          ● ● ●
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ================= RIGHT SECTION ================= -->
+    <div class="right-section">
+
+      <div class="login-card">
+
+        <!-- Shield -->
+        <div class="login-shield">
+          <div class="shield-icon">
+            ✓
+          </div>
+        </div>
+
+        <!-- Title -->
+        <h2>Welcome Back!</h2>
+
+        <p class="login-subtitle">
+          Sign in to continue to NPI Proposal Tracking System
+        </p>
+
+
+        <!-- Domain Tabs -->
+        <div class="domain-tabs">
+
+          <button class="domain-tab active">
+            i-Pocket
+          </button>
+
+          <button class="domain-tab">
+            Believe
+          </button>
+
+        </div>
+
+
+        <!-- Domain Account -->
+        <div class="input-box select-box">
+
+          <div class="input-icon">
+            ▤
+          </div>
+
+          <div class="select-content">
+            <span class="selected-domain">
+              DEPGZN
+            </span>
+
+            <span class="input-label">
+              Domain Account
+            </span>
+          </div>
+
+          <div class="dropdown-arrow">
+           ⌄
+          </div>
+
+        </div>
+
+
+        <!-- Username -->
+        <div class="input-box">
+
+          <div class="input-icon">
+            👤
+          </div>
+
+          <input
+            type="text"
+            placeholder="Username"
+          >
+
+        </div>
+
+
+        <!-- Password -->
+        <div class="input-box">
+
+          <div class="input-icon">
+            🔒
+          </div>
+
+          <input
+            type="password"
+            placeholder="Password"
+          >
+
+          <div class="password-eye">
+            ◉
+          </div>
+
+        </div>
+
+
+        <!-- Remember / Forgot -->
+        <div class="login-options">
+
+          <label class="remember">
+
+            <input type="checkbox">
+
+            <span class="custom-checkbox"></span>
+
+            <span>Remember Me</span>
+
+          </label>
+
+          <a href="#" class="forgot-password">
+            Forgot Password?
+          </a>
+
+        </div>
+
+
+        <!-- Login Button -->
+        <button class="login-button">
+          Login
+        </button>
+
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+
+        <!-- Help -->
+        <div class="help-text">
+          Need help?
+          <a href="#">
+            Contact Administrator
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <div class="footer">
+
+    <p>
+      For New Proposal Change/Addition, Please contact Administrator:
+      ISM (EXT no: +33-28370/533-26282)
+    </p>
+
+    <p>
+      © 2026-2027 Foxconn A Business Group. All Rights Reserved.
+    </p>
+
+  </div>
+
+</div>
