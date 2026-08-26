@@ -1,0 +1,273 @@
+<div *ngIf="loading" class="proposals-state">
+  Loading…
+</div>
+
+<div *ngIf="error" class="proposals-state proposals-state--error">
+  Couldn't load summary.
+  <a href="javascript:void(0)" (click)="fetchSummaryData()">Retry</a>
+</div>
+
+
+<div class="summary-grid" *ngIf="!loading && !error">
+
+  <div
+    class="summary-card"
+    *ngFor="let item of summaryCards; let i = index"
+    [ngClass]="{
+      'card-total': i === 0,
+      'card-track': i === 1,
+      'card-overdue': i === 2,
+      'card-closed': i === 3,
+      'card-rejected': i === 4
+    }"
+  >
+
+    <!-- Top -->
+    <div class="summary-top">
+
+      <div class="summary-icon">
+
+        <!-- Total -->
+        <svg *ngIf="i === 0"
+             viewBox="0 0 24 24"
+             class="card-svg">
+          <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+          <path d="M8 8h8M8 12h8M8 16h5"></path>
+        </svg>
+
+        <!-- On Track -->
+        <svg *ngIf="i === 1"
+             viewBox="0 0 24 24"
+             class="card-svg">
+          <path d="M4 17l5-5 4 3 7-8"></path>
+          <path d="M16 7h4v4"></path>
+        </svg>
+
+        <!-- Overdue -->
+        <svg *ngIf="i === 2"
+             viewBox="0 0 24 24"
+             class="card-svg">
+          <circle cx="12" cy="12" r="8"></circle>
+          <path d="M12 7v5l3 2"></path>
+        </svg>
+
+        <!-- Closed -->
+        <svg *ngIf="i === 3"
+             viewBox="0 0 24 24"
+             class="card-svg">
+          <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+          <path d="M8 12l3 3 5-6"></path>
+        </svg>
+
+        <!-- Rejected -->
+        <svg *ngIf="i === 4"
+             viewBox="0 0 24 24"
+             class="card-svg">
+          <circle cx="12" cy="12" r="8"></circle>
+          <path d="M9 9l6 6M15 9l-6 6"></path>
+        </svg>
+
+      </div>
+
+
+      <div class="summary-heading">
+
+        <div class="summary-title">
+          {{ item.title }}
+        </div>
+
+        <div class="summary-value">
+          {{ item.value }}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Bottom -->
+    <div class="summary-bottom">
+
+      <div
+        class="summary-change"
+        *ngIf="item.change"
+        [class.down]="item.down"
+      >
+        <span *ngIf="!item.down">↑</span>
+        <span *ngIf="item.down">↓</span>
+
+        {{ item.change }}
+      </div>
+
+      <div class="summary-description">
+
+        <span *ngIf="i === 0">
+          All time proposals
+        </span>
+
+        <span *ngIf="i === 1">
+          Proposals on track
+        </span>
+
+        <span *ngIf="i === 2">
+          Require attention
+        </span>
+
+        <span *ngIf="i === 3">
+          Successfully closed
+        </span>
+
+        <span *ngIf="i === 4">
+          Not accepted
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Decorative mini graph -->
+    <div class="mini-chart">
+
+      <svg
+        viewBox="0 0 150 55"
+        preserveAspectRatio="none"
+      >
+
+        <defs>
+          <linearGradient
+            [attr.id]="'gradient-' + i"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop
+              offset="0%"
+              stop-opacity="0.30"
+            />
+
+            <stop
+              offset="100%"
+              stop-opacity="0"
+            />
+          </linearGradient>
+        </defs>
+
+
+        <!-- Area -->
+        <path
+          *ngIf="i === 0"
+          class="chart-area"
+          d="M0,45 C15,43 20,30 35,35
+             C50,40 50,18 65,25
+             C80,33 82,13 95,20
+             C110,29 112,10 125,18
+             C135,25 142,12 150,15
+             L150,55 L0,55 Z"
+        ></path>
+
+        <path
+          *ngIf="i === 1"
+          class="chart-area"
+          d="M0,48 C15,45 20,27 35,34
+             C50,41 55,18 68,24
+             C82,31 90,12 103,19
+             C115,27 123,9 135,17
+             C142,21 147,14 150,12
+             L150,55 L0,55 Z"
+        ></path>
+
+        <path
+          *ngIf="i === 2"
+          class="chart-area"
+          d="M0,48 C15,44 20,36 35,40
+             C50,44 53,25 65,31
+             C78,39 82,15 95,27
+             C108,40 110,5 123,20
+             C135,32 142,16 150,20
+             L150,55 L0,55 Z"
+        ></path>
+
+        <path
+          *ngIf="i === 3"
+          class="chart-area"
+          d="M0,48 C15,42 20,35 35,39
+             C48,43 53,25 65,30
+             C80,36 83,17 96,22
+             C108,28 112,7 125,18
+             C137,29 143,15 150,17
+             L150,55 L0,55 Z"
+        ></path>
+
+        <path
+          *ngIf="i === 4"
+          class="chart-area"
+          d="M0,48 C15,45 20,39 35,42
+             C50,46 55,29 67,34
+             C80,39 86,20 98,28
+             C112,38 115,9 128,22
+             C139,33 145,19 150,21
+             L150,55 L0,55 Z"
+        ></path>
+
+
+        <!-- Line -->
+
+        <path
+          *ngIf="i === 0"
+          class="chart-line"
+          d="M0,45 C15,43 20,30 35,35
+             C50,40 50,18 65,25
+             C80,33 82,13 95,20
+             C110,29 112,10 125,18
+             C135,25 142,12 150,15"
+        ></path>
+
+        <path
+          *ngIf="i === 1"
+          class="chart-line"
+          d="M0,48 C15,45 20,27 35,34
+             C50,41 55,18 68,24
+             C82,31 90,12 103,19
+             C115,27 123,9 135,17
+             C142,21 147,14 150,12"
+        ></path>
+
+        <path
+          *ngIf="i === 2"
+          class="chart-line"
+          d="M0,48 C15,44 20,36 35,40
+             C50,44 53,25 65,31
+             C78,39 82,15 95,27
+             C108,40 110,5 123,20
+             C135,32 142,16 150,20"
+        ></path>
+
+        <path
+          *ngIf="i === 3"
+          class="chart-line"
+          d="M0,48 C15,42 20,35 35,39
+             C48,43 53,25 65,30
+             C80,36 83,17 96,22
+             C108,28 112,7 125,18
+             C137,29 143,15 150,17"
+        ></path>
+
+        <path
+          *ngIf="i === 4"
+          class="chart-line"
+          d="M0,48 C15,45 20,39 35,42
+             C50,46 55,29 67,34
+             C80,39 86,20 98,28
+             C112,38 115,9 128,22
+             C139,33 145,19 150,21"
+        ></path>
+
+      </svg>
+
+    </div>
+
+  </div>
+
+</div>
