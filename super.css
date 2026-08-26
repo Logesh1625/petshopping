@@ -1,0 +1,481 @@
+.summary-grid {
+  width: 100%;
+  display: grid;
+
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 22px;
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.summary-card {
+  position: relative;
+
+  min-height: 178px;
+
+  padding: 21px 20px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #edf0f5;
+
+  border-radius: 19px;
+
+  box-shadow:
+    0 5px 18px rgba(31, 41, 55, 0.045),
+    0 1px 3px rgba(31, 41, 55, 0.025);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  cursor: default;
+
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    opacity: 0;
+
+    transition: opacity 0.25s ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+      0 15px 35px rgba(31, 41, 55, 0.10),
+      0 3px 8px rgba(31, 41, 55, 0.04);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .summary-icon {
+      transform: scale(1.06);
+    }
+
+    .mini-chart {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+
+/* =========================================
+   CARD TOP
+========================================= */
+
+.summary-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+
+.summary-heading {
+  min-width: 0;
+}
+
+
+.summary-title {
+  color: #8992a3;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.65px;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+.summary-value {
+  margin-top: 6px;
+
+  color: #172033;
+
+  font-size: 32px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.summary-icon {
+  flex: 0 0 auto;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  transition: transform 0.25s ease;
+}
+
+
+.card-svg {
+  width: 23px;
+  height: 23px;
+
+  fill: none;
+
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+
+/* =========================================
+   BOTTOM
+========================================= */
+
+.summary-bottom {
+  position: relative;
+
+  z-index: 3;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 20px;
+}
+
+
+.summary-description {
+  color: #929bab;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+.summary-change {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 3px;
+
+  padding: 5px 8px;
+
+  border-radius: 20px;
+
+  color: #159669;
+
+  background: #eaf9f2;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+
+  &.down {
+    color: #e86f17;
+
+    background: #fff1e7;
+  }
+}
+
+
+/* =========================================
+   MINI GRAPH
+========================================= */
+
+.mini-chart {
+  position: absolute;
+
+  right: 8px;
+
+  bottom: 4px;
+
+  width: 135px;
+
+  height: 58px;
+
+  opacity: 0.72;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+  }
+}
+
+
+.chart-line {
+  fill: none;
+
+  stroke-width: 2.3;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+
+.chart-area {
+  stroke: none;
+}
+
+
+/* =========================================
+   TOTAL - BLUE
+========================================= */
+
+.card-total {
+  &::before {
+    background: #2563eb;
+  }
+
+  .summary-icon {
+    color: #2563eb;
+
+    background: #eaf2ff;
+  }
+
+  .chart-line {
+    stroke: #397cff;
+  }
+
+  .chart-area {
+    fill: #397cff;
+    opacity: 0.12;
+  }
+}
+
+
+/* =========================================
+   ON TRACK - GREEN
+========================================= */
+
+.card-track {
+  &::before {
+    background: #16a36a;
+  }
+
+  .summary-icon {
+    color: #12a76b;
+
+    background: #e8faf1;
+  }
+
+  .chart-line {
+    stroke: #32c886;
+  }
+
+  .chart-area {
+    fill: #32c886;
+    opacity: 0.12;
+  }
+}
+
+
+/* =========================================
+   OVERDUE - ORANGE
+========================================= */
+
+.card-overdue {
+  &::before {
+    background: #f07819;
+  }
+
+  .summary-icon {
+    color: #ed781d;
+
+    background: #fff0e5;
+  }
+
+  .chart-line {
+    stroke: #ff994d;
+  }
+
+  .chart-area {
+    fill: #ff994d;
+    opacity: 0.13;
+  }
+}
+
+
+/* =========================================
+   CLOSED - PURPLE
+========================================= */
+
+.card-closed {
+  &::before {
+    background: #7652df;
+  }
+
+  .summary-icon {
+    color: #7652df;
+
+    background: #f0ebff;
+  }
+
+  .chart-line {
+    stroke: #9777ee;
+  }
+
+  .chart-area {
+    fill: #9777ee;
+    opacity: 0.13;
+  }
+}
+
+
+/* =========================================
+   REJECTED - RED
+========================================= */
+
+.card-rejected {
+  &::before {
+    background: #e04444;
+  }
+
+  .summary-icon {
+    color: #e04444;
+
+    background: #ffecec;
+  }
+
+  .chart-line {
+    stroke: #ef6868;
+  }
+
+  .chart-area {
+    fill: #ef6868;
+    opacity: 0.13;
+  }
+}
+
+
+/* =========================================
+   LOADING / ERROR
+========================================= */
+
+.proposals-state {
+  padding: 25px 0;
+
+  text-align: center;
+
+  color: #9aa2b1;
+
+  font-size: 12px;
+
+  &--error {
+    color: #e04b4b;
+  }
+
+  a {
+    margin-left: 5px;
+
+    color: #2f80ed;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1450px) {
+
+  .summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 1000px) {
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .summary-card {
+    min-height: 165px;
+
+    padding: 18px;
+  }
+
+  .summary-value {
+    font-size: 29px;
+  }
+
+  .mini-chart {
+    width: 125px;
+  }
+
+}
