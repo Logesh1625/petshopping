@@ -1,0 +1,137 @@
+<div class="npv">
+  <div *ngIf="loading" class="npv__state">
+    <nz-spin nzSpinning></nz-spin>
+  </div>
+
+  <div *ngIf="!loading && error" class="npv__state npv__state--error">
+    Could not load this form. Please check the form code and try again.
+  </div>
+
+  <div *ngIf="!loading && !error && detail" class="npv__container">
+
+    <!-- 1. TOP: NPI Proposal Application Form Details -->
+    <div class="npv__card">
+      <div class="npv__header">
+        <h1 class="npv__title">NPI Proposal Application Form</h1>
+        <div class="npv__form-code">Form Code: {{ detail.formCode }}</div>
+      </div>
+
+      <!-- Applicant Information -->
+      <div class="npv__section-label">Applicant Information</div>
+      <div class="npv__grid">
+        <div class="npv__field"><span class="npv__label">Emp. Id:</span><span class="npv__value">{{ detail.EmpNo }}</span></div>
+        <div class="npv__field"><span class="npv__label">Emp. Name:</span><span class="npv__value">{{ detail.empName }}</span></div>
+        <div class="npv__field"><span class="npv__label">Site:</span><span class="npv__value">{{ detail.site }}</span></div>
+        <div class="npv__field"><span class="npv__label">Salary Grade:</span><span class="npv__value">{{ detail.salaryGrade }}</span></div>
+        <div class="npv__field"><span class="npv__label">Management Position:</span><span class="npv__value">{{ detail.managementPosition }}</span></div>
+        <div class="npv__field"><span class="npv__label">Department:</span><span class="npv__value">{{ detail.department }}</span></div>
+        <div class="npv__field"><span class="npv__label">Cost Code:</span><span class="npv__value">{{ detail.costCode }}</span></div>
+        <div class="npv__field"><span class="npv__label">Ext. Number:</span><span class="npv__value npv__value--link">{{ detail.extNumber }}</span></div>
+        <div class="npv__field"><span class="npv__label">Email:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.email }}">{{ detail.email }}</a></div>
+      </div>
+
+      <!-- NPI Proposal Information -->
+      <div class="npv__section-label">NPI Proposal Information</div>
+      <div class="npv__grid">
+        <div class="npv__field"><span class="npv__label">Site:</span><span class="npv__value">{{ detail.proposalSite }}</span></div>
+        <div class="npv__field"><span class="npv__label">Area:</span><span class="npv__value">{{ detail.area }}</span></div>
+        <div class="npv__field"><span class="npv__label">Building:</span><span class="npv__value">{{ detail.building }}</span></div>
+        <div class="npv__field"><span class="npv__label">Floor:</span><span class="npv__value">{{ detail.floor }}</span></div>
+        <div class="npv__field"><span class="npv__label">Lab Name:</span><span class="npv__value">{{ detail.labName }}</span></div>
+        <div class="npv__field"><span class="npv__label">DRI Employee ID:</span><span class="npv__value">{{ detail.DriEmp }}</span></div>
+        <div class="npv__field"><span class="npv__label">HOD Employee ID:</span><span class="npv__value">{{ detail.hodEmployeeId }}</span></div>
+        <div class="npv__field"><span class="npv__label">Category:</span><span class="npv__value">{{ detail.category }}</span></div>
+        <div class="npv__field"><span class="npv__label">DRI Employee Email ID:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.driEmployeeEmail }}">{{ detail.driEmployeeEmail }}</a></div>
+        <div class="npv__field"><span class="npv__label">HOD Employee Email ID:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.hodEmployeeEmail }}">{{ detail.hodEmployeeEmail }}</a></div>
+        <div class="npv__field"><span class="npv__label">Total PC QTY:</span><span class="npv__value">{{ detail.totalPcQty }}</span></div>
+        <div class="npv__field"><span class="npv__label">NPS Approved Date:</span><span class="npv__value">{{ detail.npsApprovedDate }}</span></div>
+      </div>
+
+      <!-- Reason -->
+      <div class="npv__reason">
+        <span class="npv__label">Reason:</span>
+        <div class="npv__reason-box">{{ detail.REASON }}</div>
+      </div>
+    </div>
+
+    <!-- 2. BOTTOM: Horizontal Work Detail (Left to Right Flow) -->
+    <div class="npv-work">
+      <h2 class="npv-work__heading">Work Detail</h2>
+
+      <div *ngIf="stepsLoading" class="npv__state">
+        <nz-spin nzSpinning></nz-spin>
+      </div>
+
+      <div *ngIf="!stepsLoading && stepsError" class="npv__state npv__state--error">
+        Could not load the work flow for this form.
+      </div>
+
+      <!-- Horizontal Flow List -->
+      <div *ngIf="!stepsLoading && !stepsError && workSteps.length" class="npv-work__timeline">
+        <div *ngFor="let step of workSteps" class="npv-work__step" [ngClass]="'npv-work__step--' + step.statusType">
+          <!-- Circle Node -->
+          <div class="npv-work__node">
+            <i nz-icon nzType="user" nzTheme="fill"></i>
+          </div>
+            <!-- Step Body Details -->
+            <div class="npv-work__body">
+            <div class="npv-work__title">{{ step.title }}</div>
+            <div>
+            <span class="npv-work__status" [ngClass]="'npv-work__status--' + step.statusType">{{ step.status }}</span>
+            </div>
+            <div class="npv-work__emp" *ngIf="step.OPT_EMP_NAME">{{ step.OPT_EMP_NAME }}</div>
+            <div class="npv-work__date" *ngIf="step.LAST_EDIT_DT">{{ step.LAST_EDIT_DT }}</div>
+            <div class="npv-work__reason" *ngIf="step.REASON">
+            <span class="npv-work__reason-label">Remark:</span> {{ step.REASON }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!stepsLoading && !stepsError && !workSteps.length" class="npv-work__empty">
+        No work flow data found for this form.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+///////
+
+
+  // NPI Proposal Employee Status - dashboard chart
+  getEmployeeStatusList(): Observable<any> {
+    const _param = {
+      Func: "NPIProposalForm-GetNPiProposalInfo",
+      FormCode: "",
+      EmpNo: "",
+      Category1: "",
+      EmpName: "",
+      StartDate: "",
+      EndDate: "",
+      FormStatus: "",
+      Factory: ""
+    };
+
+    const config = {
+      headers: {
+        apiID: "ffff-1783663681896-10208193125-1822",
+        userKey: "E9785F13CCEAFB251A6AB147AFD24336",   // Test
+      },
+    };
+
+    const param = this.dealPostParamsEncrypt(_param);
+    return this.http
+      .post('http://10.208.193.125:8086/gateway/manager', param, null, config)   // ← Test URL hardcode
+      .pipe(
+        map((resp: any) => {
+          const res = JSON.parse(this.security.decrypt(resp.r, this.iwxKInfo));
+          console.log('DEBUG - Employee Status API response:', res);
+          if (res.IsOK === "1") {
+            return res.List;
+          }
+          return [];
+        })
+      );
+  }
+//////
