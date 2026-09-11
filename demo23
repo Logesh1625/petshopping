@@ -1,0 +1,84 @@
+getFormSignFlowDetail_Oracle(
+  strFormID: string,
+  strFormCode: string,
+  strEmpNo: string = ''
+): Observable<any> {
+
+  const _param = {
+    Func: "GetFormSignFlowDetail_Oracle",
+    strFormID: strFormID,
+    strFormCode: strFormCode,
+    strEmpNo: strEmpNo
+  };
+
+  const config = {
+    headers: {
+      apiID: "ffff-1652929922559-17229253125-0664",
+      userKey: "E9785F13CCEAFB251A6AB147AFD24336"
+    }
+  };
+
+  console.log('SIGN FLOW REQUEST:', _param);
+
+  const param = this.dealPostParamsEncrypt(_param);
+
+  return this.http
+    .post(
+      'http://10.208.193.125:8086/gateway/manager',
+      param,
+      null,
+      config
+    )
+    .pipe(
+      map((resp: any) => {
+
+        console.log('SIGN FLOW RAW RESPONSE:', resp);
+        console.log('SIGN FLOW RESPONSE TYPE:', typeof resp);
+        console.log('SIGN FLOW RESPONSE r:', resp && resp.r);
+
+        // Response itself is empty
+        if (!resp) {
+          console.error('SIGN FLOW: Empty response');
+          return [];
+        }
+
+        // Response is an array
+        if (Array.isArray(resp)) {
+          console.error(
+            'SIGN FLOW: API returned array instead of encrypted response:',
+            resp
+          );
+          return resp;
+        }
+
+        // Encrypted response is expected here
+        if (!resp.r) {
+          console.error(
+            'SIGN FLOW: Response does not contain r:',
+            resp
+          );
+          return [];
+        }
+
+        const decrypted = this.security.decrypt(
+          resp.r,
+          this.iwxKInfo
+        );
+
+        console.log('SIGN FLOW DECRYPTED:', decrypted);
+
+        const res = JSON.parse(decrypted);
+
+        console.log('SIGN FLOW PARSED:', res);
+        console.log('SIGN FLOW IsOK:', res.IsOK);
+        console.log('SIGN FLOW List:', res.List);
+
+        if (res.IsOK === "1") {
+          return res.List || [];
+        }
+
+        console.error('SIGN FLOW API IsOK is not 1:', res);
+        return [];
+      })
+    );
+}
