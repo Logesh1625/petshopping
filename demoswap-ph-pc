@@ -1,0 +1,1147 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PublicNetService } from '../../../../a_Public_net/Public_net.service';
+
+interface ProposalDetail {
+  formCode: string;
+  EmpNo: string;
+  empName: string;
+  site: string;
+  salaryGrade: string;
+  managementPosition: string;
+  department: string;
+  costCode: string;
+  extNumber: string;
+  email: string;
+  proposalSite: string;
+  area: string;
+  building: string;
+  floor: string;
+  labName: string;
+  DriEmp: string;
+  hodEmployeeId: string;
+  category: string;
+  driEmployeeEmail: string;
+  hodEmployeeEmail: string;
+  totalPcQty: string;
+  npsApprovedDate: string;
+  REASON: string;
+  CurApprovename: string;
+}
+
+type WorkStepStatusType =
+  'done' |
+  'pending' |
+  'delay' |
+  'rejected';
+
+interface WorkStep {
+  stepId: number;
+  title: string;
+  OPT_EMP_NAME: string;
+  status: string;
+  statusType: WorkStepStatusType;
+  LAST_EDIT_DT: string;
+  REASON: string;
+}
+
+@Component({
+  selector: 'app-npi-proposal-view',
+  templateUrl: './npi-proposal-view.component.html',
+  styleUrls: ['./npi-proposal-view.component.less']
+})
+export class NpiProposalViewComponent implements OnInit {
+
+  /*
+   * Step title mapping
+   */
+  private readonly STEP_TITLES: {
+    [stepId: number]: string
+  } = {
+    0: 'Create Form',
+    7: 'First Level',
+    8: 'Second Level',
+    182: 'ISM Engineer 1',
+    183: 'ISM Engineer 1',
+    201: 'ISM Head',
+    202: 'OA Engineer',
+    203: 'Net Engineer',
+    204: 'SM Engineer',
+    205: 'ISM Engineer 2'
+  };
+
+  /*
+   * Fallback route names
+   */
+  private readonly ROUTE_NAMES = [
+    'ISM Engineer 1',
+    'ISM Head',
+    'OA Engineer',
+    'Net Engineer',
+    'SM Engineer',
+    'ISM Engineer 2'
+  ];
+
+  loading = true;
+  error = false;
+
+  formCode = '';
+
+  detail: ProposalDetail | null = null;
+
+  stepsLoading = true;
+  stepsError = false;
+
+  workSteps: WorkStep[] = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private pns: PublicNetService
+  ) {}
+
+  ngOnInit(): void {
+
+    /*
+     * Get Form Code from route
+     */
+    this.formCode =
+      this.route.snapshot.paramMap.get('formCode') || '';
+
+    console.log(
+      'NPI PROPOSAL - FORM CODE:',
+      this.formCode
+    );
+
+    if (this.formCode) {
+
+      /*
+       * Existing API
+       * Application / NPI Proposal Information
+       */
+      this.fetchDetail(this.formCode);
+
+      /*
+       * New direct Sign Flow API
+       * Work Details
+       */
+      this.fetchWorkDetail(this.formCode);
+
+    } else {
+
+      this.loading = false;
+      this.error = true;
+
+      this.stepsLoading = false;
+      this.stepsError = true;
+
+    }
+  }
+
+
+  /*
+   * Get first available value from object
+   */
+  private getFirstValue(
+    obj: any,
+    keys: string[],
+    fallback: any = ''
+  ): any {
+
+    if (!obj) {
+      return fallback;
+    }
+
+    for (const key of keys) {
+
+      const value = obj[key];
+
+      if (
+        value !== null &&
+        value !== undefined &&
+        value !== ''
+      ) {
+        return value;
+      }
+
+    }
+
+    return fallback;
+  }
+
+
+  /*
+   * Get Form Code
+   */
+  private getFormCode(row: any): string {
+
+    const value = this.getFirstValue(
+      row,
+      [
+        'FORM_CODE',
+        'FormCode',
+        'FormNo',
+        'FORM_NO',
+        'ProposalNo',
+        'formCode'
+      ],
+      ''
+    );
+
+    return String(value || '').trim();
+  }
+
+
+  /*
+   * Parse .NET Date
+   */
+  private parseDotNetDate(value: any): number {
+
+    if (!value) {
+      return 0;
+    }
+
+    const str = String(value);
+
+    const match =
+      str.match(/\/Date\((\d+)\)\//);
+
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+
+    const t =
+      new Date(str).getTime();
+
+    return isNaN(t) ? 0 : t;
+  }
+
+
+  /*
+   * Format date
+   */
+  private formatDisplayDate(value: any): string {
+
+    const ts =
+      this.parseDotNetDate(value);
+
+    if (!ts) {
+      return '';
+    }
+
+    const d =
+      new Date(ts);
+
+    const day =
+      ('0' + d.getDate()).slice(-2);
+
+    const month =
+      d.toLocaleString(
+        'en-US',
+        {
+          month: 'short'
+        }
+      ).toUpperCase();
+
+    const year =
+      d.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+
+  /*
+   * Map Application / Proposal Information
+   */
+  private mapDetail(raw: any): ProposalDetail {
+
+    const g =
+      (keys: string[]) =>
+        this.getFirstValue(
+          raw,
+          keys,
+          ''
+        );
+
+    return {
+
+      formCode:
+        g([
+          'FORM_CODE',
+          'FormCode',
+          'formCode'
+        ]) || this.formCode,
+
+      EmpNo:
+        g([
+          'EMP_ID',
+          'EmpId',
+          'EmpNo',
+          'EMP_NO'
+        ]),
+
+      empName:
+        g([
+          'EMP_NAME',
+          'EmpName',
+          'UserName',
+          'USER_NAME'
+        ]),
+
+      site:
+        g([
+          'SITE',
+          'Site',
+          'Factory',
+          'FACTORY'
+        ]),
+
+      salaryGrade:
+        g([
+          'SALARY_GRADE',
+          'SalaryGrade'
+        ]),
+
+      managementPosition:
+        g([
+          'MANAGEMENT_POSITION',
+          'ManagementPosition'
+        ]) || 'NA',
+
+      department:
+        g([
+          'UserDepartment',
+          'USER_DEPARTMENT',
+          'UserDept',
+          'USER_DEPT',
+          'DEPARTMENT',
+          'DEPT_NAME',
+          'Department',
+          'DeptName'
+        ]),
+
+      costCode:
+        g([
+          'COST_CODE',
+          'CostCode'
+        ]),
+
+      extNumber:
+        g([
+          'EXT_NUMBER',
+          'ExtNumber'
+        ]),
+
+      email:
+        g([
+          'EMAIL',
+          'Email'
+        ]),
+
+      proposalSite:
+        g([
+          'PROPOSAL_SITE',
+          'ProposalSite',
+          'SITE',
+          'Site',
+          'Factory',
+          'FACTORY'
+        ]),
+
+      area:
+        g([
+          'AREA',
+          'Area'
+        ]),
+
+      building:
+        g([
+          'BUILDING',
+          'Building'
+        ]),
+
+      floor:
+        g([
+          'FLOOR',
+          'Floor'
+        ]),
+
+      labName:
+        g([
+          'LabName',
+          'LAB_NAME',
+          'Lab_Name',
+          'Lab',
+          'LAB',
+          'Laboratory',
+          'LABORATORY'
+        ]),
+
+      DriEmp:
+        g([
+          'DriEmp',
+          'DriEmployeeId',
+          'DRI_EMP_NO',
+          'DriEmpNo'
+        ]),
+
+      hodEmployeeId:
+        g([
+          'HOD_EMPLOYEE_ID',
+          'HodEmployeeId',
+          'HOD_EMP_NO',
+          'HodEmpNo'
+        ]),
+
+      category:
+        g([
+          'Category1',
+          'Category',
+          'CATEGORY',
+          'FormCategory',
+          'FORM_CATEGORY',
+          'CATEGORY1'
+        ]),
+
+      driEmployeeEmail:
+        g([
+          'DriEmpEmail',
+          'DRI_EMPLOYEE_EMAIL_ID',
+          'DriEmployeeEmail',
+          'DRI_EMAIL',
+          'DriEmail'
+        ]),
+
+      hodEmployeeEmail:
+        g([
+          'HodEmpEmail',
+          'HOD_EMPLOYEE_EMAIL_ID',
+          'HodEmployeeEmail',
+          'HOD_EMAIL',
+          'HodEmail'
+        ]),
+
+      totalPcQty:
+        g([
+          'TOTAL_PC_QTY',
+          'TotalPcQty',
+          'PC_QTY',
+          'PcQty'
+        ]),
+
+      npsApprovedDate:
+        this.formatDisplayDate(
+          g([
+            'NPS_APPROVED_DATE',
+            'NpsApprovedDate',
+            'CREATE_DT',
+            'CreateDt'
+          ])
+        ),
+
+      REASON:
+        g([
+          'REASON',
+          'Reason',
+          'APPLY_REASON',
+          'ApplyReason',
+          'DESCRIPTION',
+          'Description'
+        ]),
+
+      CurApprovename:
+        g([
+          'CurApprovename',
+          'CUR_APPROVE_NAME',
+          'CurApproveName',
+          'CURRENT_APPROVER',
+          'CurrentApprover',
+          'ApproverName',
+          'APPROVER_NAME',
+          'CurApprover',
+          'CUR_APPROVER',
+          'signerName',
+          'SignerName',
+          'SIGNER_NAME',
+          'SignEmpName',
+          'SIGN_EMP_NAME',
+          'AuditUser',
+          'AUDIT_USER'
+        ])
+    };
+  }
+
+
+  /*
+   * Existing Proposal Information API
+   *
+   * DO NOT CHANGE THIS
+   */
+  fetchDetail(formCode: string): void {
+
+    this.loading = true;
+    this.error = false;
+
+    this.pns
+      .getEmployeeStatusList()
+      .subscribe({
+
+        next: (list: any[]) => {
+
+          list = list || [];
+
+          const matches =
+            list.filter(
+              (row: any) =>
+                this.getFormCode(row) === formCode
+            );
+
+          console.log(
+            'PROPOSAL DETAIL MATCHES:',
+            matches
+          );
+
+          if (!matches.length) {
+
+            this.error = true;
+            this.loading = false;
+
+            return;
+          }
+
+          this.detail =
+            this.mapDetail(matches[0]);
+
+          this.loading = false;
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'NPI Proposal detail error:',
+            err
+          );
+
+          this.error = true;
+          this.loading = false;
+        }
+      });
+  }
+
+
+  /*
+   * Step title
+   */
+  private stepTitle(
+    stepId: number,
+    routeOrder: number,
+    isLast: boolean
+  ): string {
+
+    if (this.STEP_TITLES[stepId]) {
+
+      return this.STEP_TITLES[stepId];
+
+    }
+
+    if (isLast) {
+
+      return 'Closed';
+
+    }
+
+    if (
+      routeOrder >= 1 &&
+      routeOrder - 1 < this.ROUTE_NAMES.length
+    ) {
+
+      return this.ROUTE_NAMES[
+        routeOrder - 1
+      ];
+
+    }
+
+    return `Step ${stepId}`;
+  }
+
+
+  /*
+   * Merge multiple users
+   * under same step
+   */
+  private mapMergedWorkStep(
+    rows: any[],
+    isLast: boolean
+  ): WorkStep {
+
+    const firstRow =
+      rows[0];
+
+    const stepId =
+      Number(
+        this.getFirstValue(
+          firstRow,
+          [
+            'STEP_ID',
+            'StepId'
+          ],
+          0
+        )
+      );
+
+    const routeOrder =
+      Number(
+        this.getFirstValue(
+          firstRow,
+          [
+            'ROUTE_ORDER',
+            'RouteOrder'
+          ],
+          -1
+        )
+      );
+
+    const title =
+      this.stepTitle(
+        stepId,
+        routeOrder,
+        isLast
+      );
+
+    const isCreatorStep =
+      stepId === 0 ||
+      routeOrder === 1 ||
+      title === 'Create Form';
+
+    const isClosedStep =
+      isLast ||
+      title === 'Closed';
+
+
+    /*
+     * Finished row
+     */
+    const finishedRow =
+      rows.find(
+        r =>
+          Number(
+            this.getFirstValue(
+              r,
+              [
+                'IS_FINISHED',
+                'IsFinished'
+              ],
+              0
+            )
+          ) === 1
+      );
+
+
+    /*
+     * Rejected row
+     */
+    const rejectedRow =
+      rows.find(
+        r =>
+          Number(
+            this.getFirstValue(
+              r,
+              [
+                'IS_FINISHED',
+                'IsFinished'
+              ],
+              0
+            )
+          ) === 2
+      );
+
+
+    const activeRow =
+      finishedRow ||
+      rejectedRow ||
+      firstRow;
+
+
+    const isFinished =
+      Number(
+        this.getFirstValue(
+          activeRow,
+          [
+            'IS_FINISHED',
+            'IsFinished'
+          ],
+          0
+        )
+      );
+
+
+    /*
+     * Status
+     */
+    let statusType:
+      WorkStepStatusType;
+
+    let status =
+      String(
+        this.getFirstValue(
+          activeRow,
+          [
+            'STATUS',
+            'Status',
+            'ACTION',
+            'Action',
+            'DECISION',
+            'Decision',
+            'RESULT',
+            'Result'
+          ],
+          ''
+        )
+      ).trim();
+
+
+    if (isFinished === 1) {
+
+      statusType = 'done';
+
+      if (!status) {
+        status = 'Approved';
+      }
+
+    } else if (isFinished === 2) {
+
+      statusType = 'rejected';
+
+      if (!status) {
+        status = 'Rejected';
+      }
+
+    } else {
+
+      statusType = 'pending';
+
+      if (!status) {
+        status = 'Pending';
+      }
+    }
+
+
+    /*
+     * Employee names
+     */
+    const empNames: string[] = [];
+
+
+    if (
+      statusType === 'done' ||
+      statusType === 'rejected'
+    ) {
+
+      const signedEmp =
+        String(
+          this.getFirstValue(
+            activeRow,
+            [
+              'OPT_EMP_NAME',
+              'EmpName',
+              'UserName',
+              'USER_NAME',
+              'SignerName',
+              'SIGNER_NAME'
+            ],
+            ''
+          )
+        ).trim();
+
+      if (signedEmp) {
+
+        empNames.push(
+          signedEmp
+        );
+
+      }
+
+    } else {
+
+      rows.forEach(
+        r => {
+
+          const name =
+            String(
+              this.getFirstValue(
+                r,
+                [
+                  'OPT_EMP_NAME',
+                  'EmpName',
+                  'UserName',
+                  'USER_NAME',
+                  'SignerName',
+                  'SIGNER_NAME'
+                ],
+                ''
+              )
+            ).trim();
+
+          if (
+            name &&
+            !empNames.includes(name)
+          ) {
+
+            empNames.push(name);
+
+          }
+
+        }
+      );
+    }
+
+
+    const OPT_EMP_NAME =
+      empNames.join(' / ');
+
+
+    /*
+     * Reason / Remarks
+     */
+    let REASON = '';
+
+
+    if (
+      !isCreatorStep &&
+      !isClosedStep
+    ) {
+
+      for (const r of rows) {
+
+        const res =
+          String(
+            this.getFirstValue(
+              r,
+              [
+                'REASON',
+                'Reason',
+                'REMARK',
+                'Remark',
+                'OPT_CONTENT',
+                'OptContent',
+                'OPT_REMARK',
+                'COMMENT',
+                'Comment',
+                'COMMENTS',
+                'Comments',
+                'AUDIT_REMARK',
+                'AuditRemark',
+                'FLOW_REMARK',
+                'FlowRemark',
+                'SIGN_REMARK',
+                'SignRemark',
+                'CHECK_REMARK',
+                'CheckRemark',
+                'NOTE',
+                'Note'
+              ],
+              ''
+            )
+          ).trim();
+
+        if (res) {
+
+          REASON = res;
+
+          break;
+
+        }
+      }
+    }
+
+
+    /*
+     * Date
+     */
+    const rawLastEditDt =
+      this.getFirstValue(
+        activeRow,
+        [
+          'LAST_EDIT_DT',
+          'LastEditDt',
+          'LAST_EDIT_DATE',
+          'CREATE_DT',
+          'CreateDt'
+        ],
+        ''
+      );
+
+
+    const formattedDate =
+      (
+        statusType === 'done' ||
+        statusType === 'rejected'
+      )
+        ? this.formatDisplayDate(
+            rawLastEditDt
+          )
+        : '';
+
+
+    return {
+
+      stepId,
+
+      title,
+
+      OPT_EMP_NAME,
+
+      status,
+
+      statusType,
+
+      REASON,
+
+      LAST_EDIT_DT:
+        formattedDate
+    };
+  }
+
+
+  /*
+   * ==========================================================
+   * NEW WORK DETAIL FLOW
+   * ==========================================================
+   *
+   * OLD:
+   * Angular
+   *   ↓
+   * Node.js :5665
+   *   ↓
+   * /api/proposals
+   *
+   * NEW:
+   * Angular
+   *   ↓
+   * PublicNetService
+   *   ↓
+   * GetFormSignFlowDetail_Oracle
+   *   ↓
+   * Work Details
+   */
+  fetchWorkDetail(
+    formCode: string
+  ): void {
+
+    this.stepsLoading = true;
+    this.stepsError = false;
+
+
+    /*
+     * Get proposal information first.
+     *
+     * We need Form ID and Employee No
+     * for Sign Flow API.
+     */
+    this.pns
+      .getEmployeeStatusList()
+      .subscribe({
+
+        next: (list: any[]) => {
+
+          list = list || [];
+
+
+          /*
+           * Find current Form Code
+           */
+          const row =
+            list.find(
+              (item: any) =>
+                this.getFormCode(item) === formCode
+            );
+
+
+          console.log(
+            'WORK DETAIL - PROPOSAL ROW:',
+            row
+          );
+
+
+          if (!row) {
+
+            console.error(
+              'WORK DETAIL - Form not found:',
+              formCode
+            );
+
+            this.stepsError = true;
+            this.stepsLoading = false;
+
+            return;
+          }
+
+
+          /*
+           * Get Form ID
+           *
+           * IMPORTANT:
+           * We are checking multiple possible
+           * field names because API response
+           * field name may vary.
+           */
+          const formId =
+            String(
+              this.getFirstValue(
+                row,
+                [
+                  'FORM_ID',
+                  'FormID',
+                  'FormId',
+                  'strFormID',
+                  'formId',
+                  'ID',
+                  'Id'
+                ],
+                ''
+              )
+            ).trim();
+
+
+          /*
+           * Get Employee Number
+           */
+          const empNo =
+            String(
+              this.getFirstValue(
+                row,
+                [
+                  'EMP_ID',
+                  'EmpId',
+                  'EmpNo',
+                  'EMP_NO',
+                  'strEmpNo'
+                ],
+                ''
+              )
+            ).trim();
+
+
+          console.log(
+            'WORK DETAIL - Form ID:',
+            formId
+          );
+
+          console.log(
+            'WORK DETAIL - Form Code:',
+            formCode
+          );
+
+          console.log(
+            'WORK DETAIL - Emp No:',
+            empNo
+          );
+
+
+          /*
+           * Form ID is mandatory
+           */
+          if (!formId) {
+
+            console.error(
+              'WORK DETAIL - Form ID is missing.'
+            );
+
+            console.error(
+              'WORK DETAIL - Full proposal row:',
+              row
+            );
+
+            this.stepsError = true;
+            this.stepsLoading = false;
+
+            return;
+          }
+
+
+          /*
+           * ==================================================
+           * DIRECT SIGN FLOW API
+           * ==================================================
+           */
+          this.pns
+            .getFormSignFlowDetail_Oracle(
+              formId,
+              formCode,
+              empNo
+            )
+            .subscribe({
+
+              next: (
+                rows: any[]
+              ) => {
+
+                console.log(
+                  'WORK DETAIL - SIGN FLOW ROWS:',
+                  rows
+                );
+
+
+                const formRows:
+                  any[] = rows || [];
+
+
+                /*
+                 * No data
+                 */
+                if (
+                  !formRows.length
+                ) {
+
+                  console.warn(
+                    'WORK DETAIL - No sign flow data returned.'
+                  );
+
+                  this.workSteps = [];
+
+                  this.stepsError = true;
+                  this.stepsLoading = false;
+
+                  return;
+                }
+
+
+                /*
+                 * Sort by ROUTE_ORDER
+                 */
+                formRows.sort(
+                  (
+                    a: any,
+                    b: any
+                  ) =>
+                    Number(
+                      this.getFirstValue(
+                        a,
+                        [
+                          'ROUTE_ORDER',
+                          'RouteOrder'
+                        ],
+                        0
+                      )
+                    ) -
+                    Number(
+                      this.getFirstValue(
+                        b,
+                        [
+                          'ROUTE_ORDER',
+                          'RouteOrder'
+                        ],
+                        0
+                      )
+                    )
+                );
+
+
+                /*
+                 * Group rows by
+                 *
+                 * ROUTE_ORDER + STEP_ID
+                 *
+                 * This merges multiple users
+                 * belonging to same step.
+                 */
+                const stepGroup
