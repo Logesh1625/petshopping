@@ -1,0 +1,125 @@
+const stepGroups:
+                  {
+                    [key: string]: any[]
+                  } = {};
+
+
+                const groupOrder:
+                  string[] = [];
+
+
+                formRows.forEach(
+                  (row: any) => {
+
+                    const routeOrder =
+                      this.getFirstValue(
+                        row,
+                        [
+                          'ROUTE_ORDER',
+                          'RouteOrder'
+                        ],
+                        '0'
+                      );
+
+
+                    const stepId =
+                      this.getFirstValue(
+                        row,
+                        [
+                          'STEP_ID',
+                          'StepId'
+                        ],
+                        '0'
+                      );
+
+
+                    const groupKey =
+                      `${routeOrder}_${stepId}`;
+
+
+                    if (
+                      !stepGroups[groupKey]
+                    ) {
+
+                      stepGroups[groupKey] = [];
+
+                      groupOrder.push(
+                        groupKey
+                      );
+
+                    }
+
+
+                    stepGroups[groupKey].push(
+                      row
+                    );
+
+                  }
+                );
+
+
+                /*
+                 * Convert API rows
+                 * into WorkStep objects
+                 */
+                this.workSteps =
+                  groupOrder.map(
+                    (
+                      key,
+                      index
+                    ) =>
+                      this.mapMergedWorkStep(
+                        stepGroups[key],
+                        index ===
+                          groupOrder.length - 1
+                      )
+                  );
+
+
+                console.log(
+                  'FINAL WORKSTEPS:',
+                  this.workSteps
+                );
+
+
+                this.stepsLoading = false;
+                this.stepsError = false;
+              },
+
+
+              error: (
+                err: any
+              ) => {
+
+                console.error(
+                  'SIGN FLOW API ERROR:',
+                  err
+                );
+
+                this.workSteps = [];
+
+                this.stepsError = true;
+                this.stepsLoading = false;
+              }
+
+            });
+        },
+
+
+        error: (
+          err: any
+        ) => {
+
+          console.error(
+            'EMPLOYEE STATUS API ERROR:',
+            err
+          );
+
+          this.stepsError = true;
+          this.stepsLoading = false;
+        }
+
+      });
+  }
+
+}
