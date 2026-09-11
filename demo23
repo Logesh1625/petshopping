@@ -1,84 +1,96 @@
-getFormSignFlowDetail_Oracle(
-  strFormID: string,
-  strFormCode: string,
-  strEmpNo: string = ''
-): Observable<any> {
+<div class="npv">
+  <div *ngIf="loading" class="npv__state">
+    <nz-spin nzSpinning></nz-spin>
+  </div>
 
-  const _param = {
-    Func: "GetFormSignFlowDetail_Oracle",
-    strFormID: strFormID,
-    strFormCode: strFormCode,
-    strEmpNo: strEmpNo
-  };
+  <div *ngIf="!loading && error" class="npv__state npv__state--error">
+    Could not load this form. Please check the form code and try again.
+  </div>
 
-  const config = {
-    headers: {
-      apiID: "ffff-1652929922559-17229253125-0664",
-      userKey: "E9785F13CCEAFB251A6AB147AFD24336"
-    }
-  };
+  <div *ngIf="!loading && !error && detail" class="npv__container">
 
-  console.log('SIGN FLOW REQUEST:', _param);
+    <!-- 1. TOP: NPI Proposal Application Form Details -->
+    <div class="npv__card">
+      <div class="npv__header">
+        <h1 class="npv__title">NPI Proposal Application Form</h1>
+        <div class="npv__form-code">Form Code: {{ detail.formCode }}</div>
+      </div>
 
-  const param = this.dealPostParamsEncrypt(_param);
+      <!-- Applicant Information -->
+      <div class="npv__section-label">Applicant Information</div>
+      <div class="npv__grid">
+        <div class="npv__field"><span class="npv__label">Emp. Id:</span><span class="npv__value">{{ detail.EmpNo }}</span></div>
+        <div class="npv__field"><span class="npv__label">Emp. Name:</span><span class="npv__value">{{ detail.empName }}</span></div>
+        <div class="npv__field"><span class="npv__label">Site:</span><span class="npv__value">{{ detail.site }}</span></div>
+        <div class="npv__field"><span class="npv__label">Salary Grade:</span><span class="npv__value">{{ detail.salaryGrade }}</span></div>
+        <div class="npv__field"><span class="npv__label">Management Position:</span><span class="npv__value">{{ detail.managementPosition }}</span></div>
+        <div class="npv__field"><span class="npv__label">Department:</span><span class="npv__value">{{ detail.department }}</span></div>
+        <div class="npv__field"><span class="npv__label">Cost Code:</span><span class="npv__value">{{ detail.costCode }}</span></div>
+        <div class="npv__field"><span class="npv__label">Ext. Number:</span><span class="npv__value npv__value--link">{{ detail.extNumber }}</span></div>
+        <div class="npv__field"><span class="npv__label">Email:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.email }}">{{ detail.email }}</a></div>
+      </div>
 
-  return this.http
-    .post(
-      'http://10.208.193.125:8086/gateway/manager',
-      param,
-      null,
-      config
-    )
-    .pipe(
-      map((resp: any) => {
+      <!-- NPI Proposal Information -->
+      <div class="npv__section-label">NPI Proposal Information</div>
+      <div class="npv__grid">
+        <div class="npv__field"><span class="npv__label">Site:</span><span class="npv__value">{{ detail.proposalSite }}</span></div>
+        <div class="npv__field"><span class="npv__label">Area:</span><span class="npv__value">{{ detail.area }}</span></div>
+        <div class="npv__field"><span class="npv__label">Building:</span><span class="npv__value">{{ detail.building }}</span></div>
+        <div class="npv__field"><span class="npv__label">Floor:</span><span class="npv__value">{{ detail.floor }}</span></div>
+        <div class="npv__field"><span class="npv__label">Lab Name:</span><span class="npv__value">{{ detail.labName }}</span></div>
+        <div class="npv__field"><span class="npv__label">DRI Employee ID:</span><span class="npv__value">{{ detail.DriEmp }}</span></div>
+        <div class="npv__field"><span class="npv__label">HOD Employee ID:</span><span class="npv__value">{{ detail.hodEmployeeId }}</span></div>
+        <div class="npv__field"><span class="npv__label">Category:</span><span class="npv__value">{{ detail.category }}</span></div>
+        <div class="npv__field"><span class="npv__label">DRI Employee Email ID:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.driEmployeeEmail }}">{{ detail.driEmployeeEmail }}</a></div>
+        <div class="npv__field"><span class="npv__label">HOD Employee Email ID:</span><a class="npv__value npv__value--link" href="mailto:{{ detail.hodEmployeeEmail }}">{{ detail.hodEmployeeEmail }}</a></div>
+        <div class="npv__field"><span class="npv__label">Total PC QTY:</span><span class="npv__value">{{ detail.totalPcQty }}</span></div>
+        <div class="npv__field"><span class="npv__label">NPS Approved Date:</span><span class="npv__value">{{ detail.npsApprovedDate }}</span></div>
+      </div>
 
-        console.log('SIGN FLOW RAW RESPONSE:', resp);
-        console.log('SIGN FLOW RESPONSE TYPE:', typeof resp);
-        console.log('SIGN FLOW RESPONSE r:', resp && resp.r);
+      <!-- Reason -->
+      <div class="npv__reason">
+        <span class="npv__label">Reason:</span>
+        <div class="npv__reason-box">{{ detail.REASON }}</div>
+      </div>
+    </div>
 
-        // Response itself is empty
-        if (!resp) {
-          console.error('SIGN FLOW: Empty response');
-          return [];
-        }
+    <!-- 2. BOTTOM: Horizontal Work Detail (Left to Right Flow) -->
+    <div class="npv-work">
+      <h2 class="npv-work__heading">Work Detail</h2>
 
-        // Response is an array
-        if (Array.isArray(resp)) {
-          console.error(
-            'SIGN FLOW: API returned array instead of encrypted response:',
-            resp
-          );
-          return resp;
-        }
+      <div *ngIf="stepsLoading" class="npv__state">
+        <nz-spin nzSpinning></nz-spin>
+      </div>
 
-        // Encrypted response is expected here
-        if (!resp.r) {
-          console.error(
-            'SIGN FLOW: Response does not contain r:',
-            resp
-          );
-          return [];
-        }
+      <div *ngIf="!stepsLoading && stepsError" class="npv__state npv__state--error">
+        Could not load the work flow for this form.
+      </div>
 
-        const decrypted = this.security.decrypt(
-          resp.r,
-          this.iwxKInfo
-        );
+      <!-- Horizontal Flow List -->
+      <div *ngIf="!stepsLoading && !stepsError && workSteps.length" class="npv-work__timeline">
+        <div *ngFor="let step of workSteps" class="npv-work__step" [ngClass]="'npv-work__step--' + step.statusType">
+          <!-- Circle Node -->
+          <div class="npv-work__node">
+            <i nz-icon nzType="user" nzTheme="fill"></i>
+          </div>
+            <!-- Step Body Details -->
+            <div class="npv-work__body">
+            <div class="npv-work__title">{{ step.title }}</div>
+            <div>
+            <span class="npv-work__status" [ngClass]="'npv-work__status--' + step.statusType">{{ step.status }}</span>
+            </div>
+            <div class="npv-work__emp" *ngIf="step.OPT_EMP_NAME">{{ step.OPT_EMP_NAME }}</div>
+            <div class="npv-work__date" *ngIf="step.LAST_EDIT_DT">{{ step.LAST_EDIT_DT }}</div>
+            <div class="npv-work__reason" *ngIf="step.REASON">
+            <span class="npv-work__reason-label">Remark:</span> {{ step.REASON }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!stepsLoading && !stepsError && !workSteps.length" class="npv-work__empty">
+        No work flow data found for this form.
+      </div>
+    </div>
 
-        console.log('SIGN FLOW DECRYPTED:', decrypted);
-
-        const res = JSON.parse(decrypted);
-
-        console.log('SIGN FLOW PARSED:', res);
-        console.log('SIGN FLOW IsOK:', res.IsOK);
-        console.log('SIGN FLOW List:', res.List);
-
-        if (res.IsOK === "1") {
-          return res.List || [];
-        }
-
-        console.error('SIGN FLOW API IsOK is not 1:', res);
-        return [];
-      })
-    );
-}
+  </div>
+</div>
