@@ -1,93 +1,853 @@
-fetchWorkDetail(formCode: string): void {
-  this.stepsLoading = true;
-  this.stepsError = false;
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PublicNetService } from '../../../../a_Public_net/Public_net.service';
 
-  console.log('WORK DETAIL - Form ID:', '10056');
-  console.log('WORK DETAIL - Form Code:', formCode);
+interface ProposalDetail {
+  formCode: string;
+  EmpNo: string;
+  empName: string;
+  site: string;
+  salaryGrade: string;
+  managementPosition: string;
+  department: string;
+  costCode: string;
+  extNumber: string;
+  email: string;
+  proposalSite: string;
+  area: string;
+  building: string;
+  floor: string;
+  labName: string;
+  DriEmp: string;
+  hodEmployeeId: string;
+  category: string;
+  driEmployeeEmail: string;
+  hodEmployeeEmail: string;
+  totalPcQty: string;
+  npsApprovedDate: string;
+  REASON: string;
+  CurApprovename: string;
+}
 
-  const empNo = '';
+type WorkStepStatusType = 'done' | 'pending' | 'delay' | 'rejected';
 
-  console.log('FINAL SIGN FLOW INPUT:', {
-    formId: '10056',
-    formCode: formCode,
-    empNo: empNo
-  });
+interface WorkStep {
+  stepId: number;
+  title: string;
+  OPT_EMP_NAME: string;
+  status: string;
+  statusType: WorkStepStatusType;
+  LAST_EDIT_DT: string;
+  REASON: string;
+}
 
-  this.pns.getFormSignFlowDetail_Oracle(
-    '10056',
-    formCode,
-    empNo
-  ).subscribe({
-    next: (rows: any[]) => {
+@Component({
+  selector: 'app-npi-proposal-view',
+  templateUrl: './npi-proposal-view.component.html',
+  styleUrls: ['./npi-proposal-view.component.less']
+})
+export class NpiProposalViewComponent implements OnInit {
 
-      console.log('SIGN FLOW FINAL ROWS:', rows);
-      console.log('SIGN FLOW IS ARRAY:', Array.isArray(rows));
-      console.log('SIGN FLOW LENGTH:', rows ? rows.length : 0);
+  /*
+   * Form ID is common for all NPI Proposal forms.
+   */
+  private readonly FORM_ID = '10056';
 
-      if (!rows || !rows.length) {
-        console.warn('WORK DETAIL - No sign flow data returned.');
-        this.workSteps = [];
-        this.stepsLoading = false;
-        this.stepsError = false;
-        return;
+  loading = true;
+  error = false;
+
+  formCode = '';
+  detail: ProposalDetail | null = null;
+
+  stepsLoading = true;
+  stepsError = false;
+  workSteps: WorkStep[] = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private pns: PublicNetService
+  ) { }
+
+  ngOnInit(): void {
+
+    this.formCode =
+      this.route.snapshot.paramMap.get('formCode') || '';
+
+    console.log('NPI PROPOSAL - FORM CODE:', this.formCode);
+
+    if (this.formCode) {
+
+      // Existing API - Application / NPI Proposal Information
+      this.fetchDetail(this.formCode);
+
+      // New API - Work Detail / Sign Flow
+      this.fetchWorkDetail(this.formCode);
+
+    } else {
+
+      this.loading = false;
+      this.error = true;
+
+      this.stepsLoading = false;
+      this.stepsError = true;
+
+    }
+  }
+
+  // ============================================================
+  // COMMON HELPER
+  // ============================================================
+
+  private getFirstValue(
+    obj: any,
+    keys: string[],
+    fallback: any = ''
+  ): any {
+
+    if (!obj) {
+      return fallback;
+    }
+
+    for (const key of keys) {
+
+      const value = obj[key];
+
+      if (
+        value !== null &&
+        value !== undefined &&
+        value !== ''
+      ) {
+        return value;
       }
+    }
 
-      this.workSteps = rows.map((r: any, index: number) => {
+    return fallback;
+  }
 
-        const desc = String(r.ROUTE_DESC || '');
-        const match = desc.match(/^(.*?)\((.*)\)$/);
+  // ============================================================
+  // GET FORM CODE
+  // ============================================================
 
-        let title = desc;
-        let empName = '';
+  private getFormCode(row: any): string {
 
-        if (match) {
-          title = match[1].trim();
-          empName = match[2].trim();
+    const value = this.getFirstValue(
+      row,
+      [
+        'FORM_CODE',
+        'FormCode',
+        'FormNo',
+        'FORM_NO',
+        'ProposalNo',
+        'formCode'
+      ],
+      ''
+    );
+
+    return String(value || '').trim();
+  }
+
+  // ============================================================
+  // DATE PARSER
+  // ============================================================
+
+  private parseDotNetDate(value: any): number {
+
+    if (!value) {
+      return 0;
+    }
+
+    const str = String(value);
+
+    const match = str.match(/\/Date\((\d+)\)\//);
+
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+
+    const t = new Date(str).getTime();
+
+    if (isNaN(t)) {
+      return 0;
+    }
+
+    return t;
+  }
+
+  // ============================================================
+  // DATE FORMAT
+  // ============================================================
+
+  private formatDisplayDate(value: any): string {
+
+    const ts = this.parseDotNetDate(value);
+
+    if (!ts) {
+      return '';
+    }
+
+    const d = new Date(ts);
+
+    const day =
+      ('0' + d.getDate()).slice(-2);
+
+    const month =
+      d.toLocaleString(
+        'en-US',
+        { month: 'short' }
+      ).toUpperCase();
+
+    const year =
+      d.getFullYear();
+
+    return day + '-' + month + '-' + year;
+  }
+
+  // ============================================================
+  // MAP APPLICATION / NPI PROPOSAL DETAILS
+  // EXISTING API - DO NOT CHANGE
+  // ============================================================
+
+  private mapDetail(raw: any): ProposalDetail {
+
+    const g = (keys: string[]) =>
+      this.getFirstValue(raw, keys, '');
+
+    return {
+
+      formCode:
+        g([
+          'FORM_CODE',
+          'FormCode',
+          'formCode'
+        ]) || this.formCode,
+
+      EmpNo:
+        g([
+          'EMP_ID',
+          'EmpId',
+          'EmpNo',
+          'EMP_NO'
+        ]),
+
+      empName:
+        g([
+          'EMP_NAME',
+          'EmpName',
+          'UserName',
+          'USER_NAME'
+        ]),
+
+      site:
+        g([
+          'SITE',
+          'Site',
+          'Factory',
+          'FACTORY'
+        ]),
+
+      salaryGrade:
+        g([
+          'SALARY_GRADE',
+          'SalaryGrade'
+        ]),
+
+      managementPosition:
+        g([
+          'MANAGEMENT_POSITION',
+          'ManagementPosition'
+        ]) || 'NA',
+
+      department:
+        g([
+          'UserDepartment',
+          'USER_DEPARTMENT',
+          'UserDept',
+          'USER_DEPT',
+          'DEPARTMENT',
+          'DEPT_NAME',
+          'Department',
+          'DeptName'
+        ]),
+
+      costCode:
+        g([
+          'COST_CODE',
+          'CostCode'
+        ]),
+
+      extNumber:
+        g([
+          'EXT_NUMBER',
+          'ExtNumber'
+        ]),
+
+      email:
+        g([
+          'EMAIL',
+          'Email'
+        ]),
+
+      proposalSite:
+        g([
+          'PROPOSAL_SITE',
+          'ProposalSite',
+          'SITE',
+          'Site',
+          'Factory',
+          'FACTORY'
+        ]),
+
+      area:
+        g([
+          'AREA',
+          'Area'
+        ]),
+
+      building:
+        g([
+          'BUILDING',
+          'Building'
+        ]),
+
+      floor:
+        g([
+          'FLOOR',
+          'Floor'
+        ]),
+
+      labName:
+        g([
+          'LabName',
+          'LAB_NAME',
+          'Lab_Name',
+          'Lab',
+          'LAB',
+          'Laboratory',
+          'LABORATORY'
+        ]),
+
+      DriEmp:
+        g([
+          'DriEmp',
+          'DriEmployeeId',
+          'DRI_EMP_NO',
+          'DriEmpNo'
+        ]),
+
+      hodEmployeeId:
+        g([
+          'HOD_EMPLOYEE_ID',
+          'HodEmployeeId',
+          'HOD_EMP_NO',
+          'HodEmpNo'
+        ]),
+
+      category:
+        g([
+          'Category1',
+          'Category',
+          'CATEGORY',
+          'FormCategory',
+          'FORM_CATEGORY',
+          'CATEGORY1'
+        ]),
+
+      driEmployeeEmail:
+        g([
+          'DriEmpEmail',
+          'DRI_EMPLOYEE_EMAIL_ID',
+          'DriEmployeeEmail',
+          'DRI_EMAIL',
+          'DriEmail'
+        ]),
+
+      hodEmployeeEmail:
+        g([
+          'HodEmpEmail',
+          'HOD_EMPLOYEE_EMAIL_ID',
+          'HodEmployeeEmail',
+          'HOD_EMAIL',
+          'HodEmail'
+        ]),
+
+      totalPcQty:
+        g([
+          'TOTAL_PC_QTY',
+          'TotalPcQty',
+          'PC_QTY',
+          'PcQty'
+        ]),
+
+      npsApprovedDate:
+        this.formatDisplayDate(
+          g([
+            'NPS_APPROVED_DATE',
+            'NpsApprovedDate',
+            'CREATE_DT',
+            'CreateDt'
+          ])
+        ),
+
+      REASON:
+        g([
+          'REASON',
+          'Reason',
+          'APPLY_REASON',
+          'ApplyReason',
+          'DESCRIPTION',
+          'Description'
+        ]),
+
+      CurApprovename:
+        g([
+          'CurApprovename',
+          'CUR_APPROVE_NAME',
+          'CurApproveName',
+          'CURRENT_APPROVER',
+          'CurrentApprover',
+          'ApproverName',
+          'APPROVER_NAME',
+          'CurApprover',
+          'CUR_APPROVER',
+          'signerName',
+          'SignerName',
+          'SIGNER_NAME',
+          'SignEmpName',
+          'SIGN_EMP_NAME',
+          'AuditUser',
+          'AUDIT_USER'
+        ])
+    };
+  }
+
+  // ============================================================
+  // FETCH APPLICATION / NPI PROPOSAL DETAIL
+  // EXISTING API
+  // ============================================================
+
+  fetchDetail(formCode: string): void {
+
+    this.loading = true;
+    this.error = false;
+
+    this.pns.getEmployeeStatusList().subscribe({
+
+      next: (list: any[]) => {
+
+        list = list || [];
+
+        const matches =
+          list.filter(
+            (row: any) =>
+              this.getFormCode(row) === formCode
+          );
+
+        console.log(
+          'PROPOSAL DETAIL MATCHES:',
+          matches
+        );
+
+        if (!matches.length) {
+
+          this.error = true;
+          this.loading = false;
+
+          return;
         }
 
-        const flag = String(r.ROUTE_FLAG || '');
+        this.detail =
+          this.mapDetail(matches[0]);
 
-        let statusType: WorkStepStatusType = 'pending';
-        let status = 'Pending';
+        this.loading = false;
+      },
 
-        if (flag === '0') {
-          statusType = 'done';
-          status = 'Approved';
-        } else if (flag === '1') {
-          statusType = 'pending';
-          status = 'In Progress';
-        } else if (flag === '2') {
-          statusType = 'pending';
-          status = 'Waiting';
-        } else if (flag === '3') {
-          statusType = 'rejected';
-          status = 'Rejected';
+      error: (err: any) => {
+
+        console.error(
+          'NPI Proposal detail error:',
+          err
+        );
+
+        this.error = true;
+        this.loading = false;
+      }
+    });
+  }
+
+  // ============================================================
+  // PARSE ROUTE DESCRIPTION
+  //
+  // Example:
+  //
+  // "First Level(HH0000010 JEEVA)"
+  //
+  // becomes:
+  //
+  // title = "First Level"
+  // employee = "JEEVA"
+  // ============================================================
+
+  private parseRouteDesc(
+    desc: string
+  ): {
+    title: string;
+    empNames: string[];
+  } {
+
+    const value =
+      String(desc || '').trim();
+
+    if (!value) {
+
+      return {
+        title: '',
+        empNames: []
+      };
+    }
+
+    const match =
+      value.match(/^(.*?)\((.*)\)$/);
+
+    if (!match) {
+
+      return {
+        title: value,
+        empNames: []
+      };
+    }
+
+    const title =
+      match[1].trim();
+
+    const inside =
+      match[2].trim();
+
+    if (!inside) {
+
+      return {
+        title: title,
+        empNames: []
+      };
+    }
+
+    const empNames =
+      inside
+        .split(',')
+        .map((part: string) => {
+
+          const p =
+            part.trim();
+
+          /*
+           * Example:
+           * HH0000010 JEEVA
+           *
+           * Remove employee number
+           * and keep name.
+           */
+
+          const nameMatch =
+            p.match(/^(\S+)\s+(.*)$/);
+
+          if (nameMatch) {
+            return nameMatch[2].trim();
+          }
+
+          return p;
+
+        })
+        .filter(
+          (name: string) => !!name
+        );
+
+    return {
+      title: title,
+      empNames: empNames
+    };
+  }
+
+  // ============================================================
+  // MAP NEW SIGN FLOW API RESPONSE
+  //
+  // API fields:
+  //
+  // ROUTE_DESC
+  // ROUTE_FLAG
+  // OPT_TIME
+  // OPT_EXPLAIN
+  // strResult
+  // ============================================================
+
+  private mapGatewayRouteToWorkSteps(
+    routes: any[]
+  ): WorkStep[] {
+
+    return (routes || []).map(
+      (r: any, index: number) => {
+
+        const parsed =
+          this.parseRouteDesc(
+            r.ROUTE_DESC
+          );
+
+        const flag =
+          String(
+            this.getFirstValue(
+              r,
+              [
+                'ROUTE_FLAG',
+                'RouteFlag'
+              ],
+              ''
+            )
+          );
+
+        let statusType:
+          WorkStepStatusType;
+
+        let status: string;
+
+        switch (flag) {
+
+          // Completed
+          case '0':
+
+            statusType = 'done';
+            status = 'Approved';
+
+            break;
+
+          // Current / processing
+          case '1':
+
+            statusType = 'pending';
+            status = 'In Progress';
+
+            break;
+
+          // Waiting
+          case '2':
+
+            statusType = 'pending';
+            status = 'Waiting';
+
+            break;
+
+          // Rejected
+          case '3':
+
+            statusType = 'rejected';
+            status = 'Rejected';
+
+            break;
+
+          default:
+
+            statusType = 'pending';
+            status = 'Pending';
+
+            break;
+        }
+
+        const optTime =
+          this.getFirstValue(
+            r,
+            [
+              'OPT_TIME',
+              'OptTime'
+            ],
+            ''
+          );
+
+        const optExplain =
+          this.getFirstValue(
+            r,
+            [
+              'OPT_EXPLAIN',
+              'OptExplain'
+            ],
+            ''
+          );
+
+        let reason = '';
+
+        if (
+          optExplain !== null &&
+          optExplain !== undefined &&
+          String(optExplain).trim() !== '' &&
+          String(optExplain).toLowerCase() !== 'null'
+        ) {
+
+          reason =
+            String(optExplain).trim();
         }
 
         return {
+
           stepId: index,
-          title: title,
-          OPT_EMP_NAME: empName,
-          status: status,
-          statusType: statusType,
-          LAST_EDIT_DT: r.OPT_TIME ? this.formatDisplayDate(r.OPT_TIME) : '',
-          REASON: r.OPT_EXPLAIN && r.OPT_EXPLAIN !== 'null'
-            ? String(r.OPT_EXPLAIN)
-            : ''
+
+          title:
+            parsed.title,
+
+          OPT_EMP_NAME:
+            parsed.empNames.join(' / '),
+
+          status:
+            status,
+
+          statusType:
+            statusType,
+
+          LAST_EDIT_DT:
+            optTime
+              ? this.formatDisplayDate(optTime)
+              : '',
+
+          REASON:
+            reason
         };
+      }
+    );
+  }
+
+  // ============================================================
+  // FETCH WORK DETAIL
+  //
+  // IMPORTANT:
+  //
+  // Form ID  = 10056
+  // Form Code = clicked form code
+  // Emp No    = EMPTY
+  //
+  // NO NODE.JS PORT
+  // ============================================================
+
+  fetchWorkDetail(formCode: string): void {
+
+    this.stepsLoading = true;
+    this.stepsError = false;
+
+    const formId =
+      this.FORM_ID;
+
+    const empNo =
+      '';
+
+    console.log(
+      'WORK DETAIL - Form ID:',
+      formId
+    );
+
+    console.log(
+      'WORK DETAIL - Form Code:',
+      formCode
+    );
+
+    console.log(
+      'WORK DETAIL - Emp No:',
+      empNo
+    );
+
+    const finalInput = {
+
+      formId: formId,
+
+      formCode: formCode,
+
+      empNo: empNo
+    };
+
+    console.log(
+      'FINAL SIGN FLOW INPUT:',
+      finalInput
+    );
+
+    /*
+     * Direct call to IWX Sign Flow API.
+     *
+     * No Node.js backend port.
+     */
+
+    this.pns
+      .getFormSignFlowDetail_Oracle(
+        formId,
+        formCode,
+        empNo
+      )
+      .subscribe({
+
+        next: (rows: any[]) => {
+
+          console.log(
+            'SIGN FLOW FINAL ROWS:',
+            rows
+          );
+
+          console.log(
+            'SIGN FLOW RESPONSE TYPE:',
+            typeof rows
+          );
+
+          console.log(
+            'SIGN FLOW IS ARRAY:',
+            Array.isArray(rows)
+          );
+
+          console.log(
+            'SIGN FLOW ARRAY LENGTH:',
+            rows ? rows.length : 0
+          );
+
+          if (
+            !rows ||
+            !rows.length
+          ) {
+
+            console.warn(
+              'WORK DETAIL - No sign flow data returned.'
+            );
+
+            this.workSteps = [];
+
+            this.stepsError = false;
+
+            this.stepsLoading = false;
+
+            return;
+          }
+
+          /*
+           * New API response directly contains
+           * ROUTE_DESC / ROUTE_FLAG / OPT_TIME etc.
+           */
+
+          this.workSteps =
+            this.mapGatewayRouteToWorkSteps(
+              rows
+            );
+
+          console.log(
+            'WORK DETAIL - MAPPED STEPS:',
+            this.workSteps
+          );
+
+          this.stepsLoading = false;
+        },
+
+        error: (err: any) => {
+
+          console.error(
+            'WORK DETAIL - Sign flow error:',
+            err
+          );
+
+          this.workSteps = [];
+
+          this.stepsError = true;
+
+          this.stepsLoading = false;
+        }
       });
+  }
 
-      this.stepsLoading = false;
-      this.stepsError = false;
-
-      console.log('WORK DETAIL - MAPPED STEPS:', this.workSteps);
-    },
-
-    error: (err: any) => {
-      console.error('SIGN FLOW ERROR:', err);
-      this.workSteps = [];
-      this.stepsLoading = false;
-      this.stepsError = true;
-    }
-  });
 }
